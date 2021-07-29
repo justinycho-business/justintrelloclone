@@ -7,9 +7,9 @@ class Bullet(db.Model):
     name = db.Column(db.VARCHAR, nullable=False)
     content = db.Column(db.VARCHAR, nullable=False)
     completed = db.Column(db.BOOLEAN, nullable=False)
-    user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'), nullable=False)
+    # user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'), nullable=False)
     checklist_id = db.Column(db.INTEGER, db.ForeignKey('checklist.id'), nullable=False)
-    user = db.relationship("User", back_populates="bullet")
+    # user = db.relationship("User", back_populates="bullet")
     checklist = db.relationship("Checklist", back_populates="bullet")
 
     def to_dict(self):
@@ -18,6 +18,6 @@ class Bullet(db.Model):
               'name': self.name,
               'content': self.content,
               'completed': self.completed,
-              'user_id': self.user_id,
+              # 'user_id': self.user_id,
               'checklist_id': self.checklist_id,
             }
