@@ -7,8 +7,8 @@ class Board(db.Model):
     name = db.Column(db.VARCHAR, nullable=False)
     user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship("User", back_populates="board")
-    list = db.relationship("List", back_populates="board")
-    connection = db.relationship("Connection", back_populates="board")
+    list = db.relationship("List", back_populates="board", cascade="all, delete-orphan")
+    connection = db.relationship("Connection", back_populates="board", cascade="all, delete-orphan")
 
     def to_dict(self):
             return {

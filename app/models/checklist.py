@@ -9,7 +9,7 @@ class Checklist(db.Model):
     card_id = db.Column(db.INTEGER, db.ForeignKey('card.id'), nullable=False)
     # user = db.relationship("User", back_populates="checklist")
     card = db.relationship("Card", back_populates="checklist")
-    bullet = db.relationship("Bullet", back_populates="checklist")
+    bullet = db.relationship("Bullet", back_populates="checklist", cascade="all, delete-orphan")
     def to_dict(self):
             return {
               'id': self.id,

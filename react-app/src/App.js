@@ -9,6 +9,7 @@ import UsersList from './components/UsersList';
 import User from './components/User';
 import Home from './components/Home';
 import Board from './components/board';
+import './components/styles/App.css'
 import { authenticate } from './store/session';
 
 function App() {
@@ -49,8 +50,11 @@ function App() {
           <User />
         </ProtectedRoute>
         <ProtectedRoute path='/' exact={true} >
-          <h1>My Home Page</h1>
+          <Home />
         </ProtectedRoute>
+        <Route path='/'>
+          <h1 className='hi404'>404 error</h1>
+        </Route>
       </Switch>
     </BrowserRouter>
   );

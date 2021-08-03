@@ -7,7 +7,7 @@ html {
   align-items: center;
   justify-content: center;
   height: 7vw; */
-  display: flex;
+  display: block;
   align-items: center;
   justify-content: center;
   height: 5vw;
@@ -24,7 +24,8 @@ html {
   left: 0px;
   width: 100%;
   /* transform: translateX(-50%); */
-  display: flex;
+  display: flex
+;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -32,6 +33,7 @@ html {
   /* border-radius: 30px; */
   /* padding: 20px; */
   background-color: yellow;
+  height: 100px;
   /* animation: slide-in 1s ease-out; */
 }
 

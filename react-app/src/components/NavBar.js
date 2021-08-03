@@ -3,8 +3,9 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import LogoutButton from './auth/LogoutButton';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import {create_board_thunk } from '../store/boards';
 import './styles/NavBar.css'
 
 
@@ -12,10 +13,35 @@ const NavBar = () => {
 
   //check Redux
   const user = useSelector(state => state?.session?.user);
-  const createBoard = () => {
+  const board0 = useSelector(state => state?.boards);
+  const dispatch = useDispatch()
+  const history = useHistory()
 
+  const[newboardid, setnewboardid] = useState('hi')
+
+  function redirect() {
+
+    if(board0?.board?.board_details && newboardid !== 'hi') {
+    console.log(newboardid);
+    console.log(board0?.board?.board_details);
+    history.push(`/board/${board0?.board?.board_details?.id}`)
+    }
 
   }
+
+  function createBoard() {
+
+        dispatch(create_board_thunk(user.id))
+        setnewboardid(board0?.board?.board_details?.id)
+        redirect()
+
+
+
+     return
+
+  }
+
+  useEffect(()=> {redirect()}, [createBoard])
 
   return (
     // <div className="navindiv">

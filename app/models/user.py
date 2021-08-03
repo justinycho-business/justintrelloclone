@@ -11,8 +11,8 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
 
-    connection = db.relationship("Connection", back_populates="user")
-    board = db.relationship("Board", back_populates="user")
+    connection = db.relationship("Connection", back_populates="user", cascade="all, delete-orphan")
+    board = db.relationship("Board", back_populates="user", cascade="all, delete-orphan")
     # list = db.relationship("List", back_populates="user")
     # card = db.relationship("Card", back_populates="user")
     # checklist = db.relationship("Checklist", back_populates="user")

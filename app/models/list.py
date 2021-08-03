@@ -9,7 +9,7 @@ class List(db.Model):
     board_id = db.Column(db.INTEGER, db.ForeignKey('board.id'), nullable=False)
     # user = db.relationship("User", back_populates="list")
     board = db.relationship("Board", back_populates="list")
-    card = db.relationship("Card", back_populates="list")
+    card = db.relationship("Card", back_populates="list", cascade="all, delete-orphan")
 
     def to_dict(self):
             return {

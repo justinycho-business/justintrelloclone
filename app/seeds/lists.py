@@ -24,11 +24,41 @@ def seed_lists():
         # user_id=1,
         board_id=2
         )
+    list3 = List(
+        name='list3',
+        # user_id=1,
+        board_id=1
+        )
+    list4 = List(
+        name='list4',
+        # user_id=1,
+        board_id=1
+        )
+    list5 = List(
+        name='list5',
+        # user_id=1,
+        board_id=1
+        )
+    list6 = List(
+        name='list6',
+        # user_id=1,
+        board_id=1
+        )
+    list7 = List(
+        name='list7',
+        # user_id=1,
+        board_id=1
+        )
 
 
     db.session.add(list0)
     db.session.add(list1)
     db.session.add(list2)
+    db.session.add(list3)
+    db.session.add(list4)
+    db.session.add(list5)
+    db.session.add(list6)
+    db.session.add(list7)
 
 
     db.session.commit()
