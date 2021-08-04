@@ -66,7 +66,7 @@ const List = (props) => {
 
     const card_filter = (array) => {
         console.log(array, "line 68===========")
-        const filtered = array.filter(ele => parseInt(cards_exist[ele]['listid']) === parseInt(props.list.id))
+        const filtered = array.filter(ele => parseInt(ele['listid']) === parseInt(props.list.id))
         const ordered_cards = filtered[0]['order']
         return ordered_cards
     }
@@ -140,8 +140,8 @@ const List = (props) => {
                 </div>
 
                 <div className="card-container">
-                    {/* {cards_exist && Object.keys(cards_exist).length > 0 &&
-                    card_filter(Object.keys(cards_exist)).map((card, index) => (
+                    {Object.keys(cards_exist).length > 0 &&
+                    card_filter(Object.values(cards_exist)).map((card, index) => (
                         <Card
                         key={card.id}
                         card={card}
@@ -152,7 +152,7 @@ const List = (props) => {
 
 
 
-                    } */}
+                    }
                 </div>
 
                 <button
