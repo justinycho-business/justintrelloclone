@@ -53,15 +53,60 @@ def changelistname(listid):
     # return {'message': f'List with ID of {listid} has been deleted'}
     lists = List.query.filter_by(board_id = int(board__id)).all()
     listsarray = [lst.to_dict() for lst in lists]
+
     listsdict = {}
+    listorder = []
+
     for lst in listsarray:
         listSingle = {}
         listSingle['id'] = lst['id']
         listSingle['board_id'] = lst['board_id']
         listSingle['name'] = lst['name']
+        listSingle['order'] = lst['order']
+
         listsdict[lst['id']] = listSingle
 
-    return listsdict
+    x = 0
+    for i in range(len(listsarray)):
+        for lst in listsarray:
+            if lst['order'] == x:
+                listorder.append(lst)
+                x = x + 1
+
+    return {'lists_in_board': listsdict,
+            'list_order': listorder}
+
+
+@board_routes.route('/change-list-order/<int:boardid>', methods=['PUT'])
+@login_required
+def changelistorder(boardid):
+    # step 1
+    request_data_body = request.get_json()
+    incoming_listorder = request_data_body['listorder']
+    board__id = request_data_body['boardid']
+
+    for index, lst in enumerate(incoming_listorder):
+        neworder = index
+        list_to_change = List.query.get(lst['id'])
+        list_to_change.order = neworder
+        db.session.commit()
+
+    lists = List.query.filter_by(board_id = int(board__id)).all()
+    listsarray2 = [lst.to_dict() for lst in lists]
+
+    listorder = []
+
+    x = 0
+    for i in range(len(listsarray2)):
+        for lst in listsarray2:
+            if lst['order'] == x:
+                listorder.append(lst)
+                x = x + 1
+
+
+
+    return {'list_order': listorder}
+
 
 @board_routes.route('/delete-list/<int:listid>', methods=['DELETE'])
 @login_required
@@ -70,22 +115,51 @@ def deletelist(listid):
     request_data_body = request.get_json()
     boardid = request_data_body['boardid']
     list_to_dlt = List.query.filter_by(id = listid).first()
+    delete_list_dict = list_to_dlt.to_dict()
+    index_of_deleted = delete_list_dict['order']
     # step 2
     db.session.delete(list_to_dlt)
     #step 3
     db.session.commit()
     # return {'message': f'List with ID of {listid} has been deleted'}
     lists = List.query.filter_by(board_id = int(boardid)).all()
+
     listsarray = [lst.to_dict() for lst in lists]
+
     listsdict = {}
     for lst in listsarray:
         listSingle = {}
         listSingle['id'] = lst['id']
         listSingle['board_id'] = lst['board_id']
         listSingle['name'] = lst['name']
+
+        if lst['order'] > index_of_deleted:
+            listSingle['order'] = (lst['order'] - 1)
+            list_update = List.query.get(lst['id'])
+            list_update.order = (lst['order'] - 1)
+            db.session.commit()
+
+        else:
+            listSingle['order'] = lst['order']
+
         listsdict[lst['id']] = listSingle
 
-    return listsdict
+    lists2 = List.query.filter_by(board_id = int(boardid)).all()
+    listsarray2 = [lst.to_dict() for lst in lists2]
+
+    listorder = []
+
+    x = 0
+    for i in range(len(listsarray2)):
+        for lst in listsarray2:
+            if lst['order'] == x:
+                listorder.append(lst)
+                x = x + 1
+
+
+
+    return {'list_order': listorder,
+            'lists_in_board': listsdict }
 
 @board_routes.route('/delete-board/<int:boardid>', methods=['DELETE'])
 @login_required
@@ -97,16 +171,20 @@ def deleteboard(boardid):
     db.session.commit()
 
     return {'board_details': None,
-            'lists_in_board': None
+            'lists_in_board': None,
+            "list_order": []
      }
 
 @board_routes.route('/create-list/<int:boardid>', methods=['POST'])
 @login_required
 def createlist(boardid):
     # step 1
+    request_data_body = request.get_json()
+    listlength = request_data_body['listlength']
     list_to_create = List(
         name = "New List",
-        board_id = boardid
+        board_id = boardid,
+        order = listlength
         )
     # step 2
     db.session.add(list_to_create)
@@ -116,15 +194,32 @@ def createlist(boardid):
     #step 4
     just_added_list = List.query.filter_by(board_id = boardid).all()
     listsarray = [lst.to_dict() for lst in just_added_list]
+
+
     listsdict = {}
     for lst in listsarray:
         listSingle = {}
         listSingle['id'] = lst['id']
         listSingle['board_id'] = lst['board_id']
         listSingle['name'] = lst['name']
+        listSingle['order'] = lst['order']
         listsdict[lst['id']] = listSingle
 
-    return listsdict
+    listorder = []
+
+    x = 0
+    for i in range(len(listsarray)):
+        for lst in listsarray:
+            if lst['order'] == x:
+                listorder.append(lst)
+                x = x + 1
+
+
+
+    return {'list_order': listorder,
+            'lists_in_board': listsdict }
+
+
 
 @board_routes.route('/create-board/<int:userid>', methods=['POST'])
 @login_required
@@ -147,7 +242,8 @@ def createboard(userid):
 
     return {
         "lists_in_board": {},
-        "board_details": boarddict
+        "board_details": boarddict,
+        "list_order": []
     }
 
 @board_routes.route('/<int:boardid>')
@@ -162,17 +258,42 @@ def getboards(boardid):
     boarddict = board.to_dict()
     listsarray = [lst.to_dict() for lst in lists]
 
+
+    for i in range(len(listsarray)):
+        orderupdate = List.query.get(listsarray[i]['id'])
+        if (orderupdate.order == None):
+            orderupdate.order = i
+            db.session.commit()
+
+
+
+    lists2 = List.query.filter_by(board_id = boardid).all()
+    listsarray2 = [lst.to_dict() for lst in lists2]
+
     #step 3
     listsdict = {}
-    for lst in listsarray:
+    listorder = []
+
+    x = 0
+    for i in range(len(listsarray2)):
+        for lst in listsarray2:
+            if lst['order'] == x:
+                listorder.append(lst)
+                x = x + 1
+
+
+    for lst in listsarray2:
         listSingle = {}
         listSingle['id'] = lst['id']
         listSingle['board_id'] = lst['board_id']
         listSingle['name'] = lst['name']
+        listSingle['order'] = lst['order']
+
         listsdict[lst['id']] = listSingle
 
-    print(listsdict, "===================")
+    print(listsdict, "line 196 ===================")
     return {
         "lists_in_board": listsdict,
-        "board_details": boarddict
+        "board_details": boarddict,
+        "list_order": listorder
     }

@@ -6,6 +6,8 @@ const GET_BOARDS = 'board/GET_BOARDS';
 
 const DELETE_LIST = 'board/DELETE_LIST';
 
+const LIST_REORDER = 'board/LIST_REORDER';
+
 const DELETE_BOARD = 'board/DELETE_BOARD';
 
 const CREATE_LIST = 'board/CREATE_LIST';
@@ -52,6 +54,11 @@ const board_name_change = (board) => ({
     payload: board
 })
 
+const list_reorder = (order) => ({
+    type: LIST_REORDER,
+    payload: order
+})
+
 // Define Thunks
 export const getUserBoardData = (boardid) => async (dispatch) => {
     const response = await fetch(`/api/board/${boardid}`)
@@ -94,13 +101,15 @@ export const delete_board_thunk = (stringboardid) => async (dispatch) => {
     }
 }
 
-export const create_list_thunk = (boardid) => async (dispatch) => {
+export const create_list_thunk = (boardid, listlength) => async (dispatch) => {
     const response = await fetch(`/api/board/create-list/${boardid}`, {
         method: ['POST'],
         headers: {
             'Accept' : 'application/json',
             'Content-Type' : 'application/json',
-           }
+           },
+           body: JSON.stringify({ 'listlength': listlength
+                                   })
 
         })
 
@@ -165,6 +174,25 @@ export const change_board_name_thunk = (boardid, boardname, userid) => async (di
         dispatch(board_name_change(newboard));
     }
 }
+
+export const list_reorder_thunk = (order, boardid) => async (dispatch) => {
+    const response = await fetch(`/api/board/change-list-order/${boardid}`, {
+        method: ['PUT'],
+        headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+           },
+           body: JSON.stringify({ 'boardid': boardid,
+                                   'listorder': order,
+                                    })
+        })
+
+
+    if(response.ok) {
+        const neworder = await response.json();
+        dispatch(list_reorder(neworder));
+    }
+}
 // export const addFundsToPortfolio = (payload) => async (dispatch) => {
 //     const response = await fetch('/api/dashboard/addFunds', {
 //         method: 'POST',
@@ -203,16 +231,22 @@ export default function boardReducer(state = initialState, action) {
         case DELETE_LIST:
             // return {...state, delete_list_msg: action.payload }
             let afterDeleteState = {...state}
+            afterDeleteState['board']['list_order'] = action.payload['list_order']
+            afterDeleteState['board']['lists_in_board'] = action.payload['lists_in_board']
+            return afterDeleteState
+
             afterDeleteState['board']['lists_in_board'] = action.payload
             return afterDeleteState
         case CREATE_LIST:
             let afterCreateState = {...state}
-            afterCreateState['board']['lists_in_board'] = action.payload
+            afterCreateState['board']['list_order'] = action.payload['list_order']
+            afterCreateState['board']['lists_in_board'] = action.payload['lists_in_board']
             return  afterCreateState
         case LIST_CHANGE_NAME:
             let afterChangeListNameState = {...state}
-            afterChangeListNameState['board']['lists_in_board'] = action.payload
-            return  afterChangeListNameState
+            afterChangeListNameState['board']['list_order'] = action.payload['list_order']
+            afterChangeListNameState['board']['lists_in_board'] = action.payload['lists_in_board']
+            return afterChangeListNameState
         case BOARD_CHANGE_NAME:
             let afterChangeBoardNameState = {...state}
             afterChangeBoardNameState['board']['board_details'] = action.payload
@@ -222,9 +256,14 @@ export default function boardReducer(state = initialState, action) {
             afterDeleteBoardNameState['board'] = action.payload
             return  afterDeleteBoardNameState
         case CREATE_BOARD:
-                let afterCreateBoardNameState = {...state}
-                afterCreateBoardNameState['board'] = action.payload
-                return  afterCreateBoardNameState
+            let afterCreateBoardNameState = {...state}
+            afterCreateBoardNameState['board'] = action.payload
+            return  afterCreateBoardNameState
+        case LIST_REORDER:
+            let afterNewOrderState = {...state}
+            afterNewOrderState['board']['list_order'] = action.payload['list_order']
+            return afterNewOrderState
+
             // case ADD_FUNDS:
         //     return {...state, amount: action.payload }
         // case DASHBOARD_DATA:

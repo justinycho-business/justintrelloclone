@@ -8,7 +8,9 @@ import {getUserBoardData,
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
-import './styles/Board.css';
+import './styles/List.css';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
+
 
 //styling for modal
 const customStyles = {
@@ -100,50 +102,69 @@ const List = (props) => {
 
 
     return (
-        <div>
-            <div className='list_in_board' key={props.list.id}>
-        {props.list.name}
-    </div>
-    <button onClick={deleteList(props.list.id)}>Delete This List</button>
-    <button onClick={
-        // listModal
-        openModal
-        }>Open Modal Edit List</button>
-    {/* <Post post={post}/> */}
+    <Draggable draggableId = {props.list.id.toString()} index={props.index}>
+        {(provided) => (
+            <div
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref = {provided.innerRef}
+            className='border-2'
+            >
 
 
-            <Modal
-                        isOpen={modalIsOpen}
-                        onAfterOpen={afterOpenModal}
-                        onRequestClose={closeModal}
-                        style={customStyles}
-                        contentLabel={props.list.name}
-                    >
-                        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>{props.list.name}</h2>
-                        <div>Edit List </div>
-                        <form>
-                        {/* <input
-                        type='hidden'
-                        value={parseInt(list.id)}
-                        /> */}
-                        <input
-                        type='text'
-                        placeholder="Give this list a new name"
-                        name="editlistname"
-                        value={listname}
-                        onChange={(e) => setlistname(e.target.value)}
-                        />
-                        {/* <button onClick={changelistname(list.id.toString(), listname)}>Submit new name</button> */}
-                        {/* <button>stays</button>
-                        <button>inside</button>
-                        <button>the modal</button> */}
-                        </form>
-                        <button onClick={changelistname(props.list.id.toString(), listname)}>Submit new name</button>
-                        <button onClick={closeModal}>close</button>
-                    </Modal>
+                <div className='list_in_board' key={props.list.id}>
+                    {props.list.name}
+                </div>
+                <button onClick={deleteList(props.list.id)}>Delete This List</button>
+                <button onClick={
+                // listModal
+                openModal
+                }>Open Modal Edit List</button>
+                {/* <Post post={post}/> */}
+
+
+                <Modal
+                            isOpen={modalIsOpen}
+                            onAfterOpen={afterOpenModal}
+                            onRequestClose={closeModal}
+                            style={customStyles}
+                            contentLabel={props.list.name}
+                        >
+                            <h2 ref={(_subtitle) => (subtitle = _subtitle)}>{props.list.name}</h2>
+                            <div>Edit List </div>
+                            <form>
+                            {/* <input
+                            type='hidden'
+                            value={parseInt(list.id)}
+                            /> */}
+                            <input
+                            type='text'
+                            placeholder="Give this list a new name"
+                            name="editlistname"
+                            value={listname}
+                            onChange={(e) => setlistname(e.target.value)}
+                            />
+                            {/* <button onClick={changelistname(list.id.toString(), listname)}>Submit new name</button> */}
+                            {/* <button>stays</button>
+                            <button>inside</button>
+                            <button>the modal</button> */}
+                            </form>
+                            <button onClick={changelistname(props.list.id.toString(), listname)}>Submit new name</button>
+                            <button onClick={closeModal}>close</button>
+                        </Modal>
+            {provided.placeholder}
+
 
 
         </div>
+
+
+
+
+
+        )}
+
+    </Draggable>
 
     )
 }

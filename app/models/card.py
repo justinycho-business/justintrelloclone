@@ -5,6 +5,7 @@ class Card(db.Model):
 
     id = db.Column(db.INTEGER, primary_key=True)
     name = db.Column(db.VARCHAR, nullable=False)
+    order = db.Column(db.INTEGER, nullable=True)
     # user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'), nullable=False)
     list_id = db.Column(db.INTEGER, db.ForeignKey('list.id'), nullable=False)
     # user = db.relationship("User", back_populates="card")
@@ -15,6 +16,7 @@ class Card(db.Model):
             return {
               'id': self.id,
               'name': self.name,
+              'order': self.order,
               # 'user_id': self.user_id,
               'list_id': self.list_id,
             }

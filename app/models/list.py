@@ -5,6 +5,7 @@ class List(db.Model):
 
     id = db.Column(db.INTEGER, primary_key=True)
     name = db.Column(db.VARCHAR, nullable=False)
+    order = db.Column(db.INTEGER, nullable=True)
     # user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'), nullable=False)
     board_id = db.Column(db.INTEGER, db.ForeignKey('board.id'), nullable=False)
     # user = db.relationship("User", back_populates="list")
@@ -15,6 +16,7 @@ class List(db.Model):
             return {
               'id': self.id,
               'name': self.name,
+              'order': self.order,
               # 'user_id': self.user_id,
               'board_id': self.board_id,
             }

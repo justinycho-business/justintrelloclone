@@ -6,12 +6,16 @@ import {getUserBoardData,
         create_list_thunk,
         change_board_name_thunk,
         delete_board_thunk,
+        list_reorder_thunk,
         change_list_name_thunk } from '../store/boards';
 import React from 'react';
 import List from './list';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import './styles/Board.css';
+
+import { DragDropContext } from 'react-beautiful-dnd';
+import { Droppable } from 'react-beautiful-dnd';
 
  //styling for modal
  const customStyles = {
@@ -62,6 +66,8 @@ const Board = () => {
     const user = useSelector(state => state?.session?.user);
     const board = useSelector(state => state?.boards?.board)
     const b_trial = useSelector(state => state?.boards);
+    const list_order_in_redux = useSelector(state => state?.boards?.board?.list_order);
+
 
 
     //make the constants needed for this component
@@ -74,6 +80,7 @@ const Board = () => {
         return result
     }
     const [boardname, setboardname] = useState('')
+    const [listorder, setlistorder] = useState([])
     // const [list_array, setlist_array] = useState([])
 
     // const changelistname = (listid, list_name) => {
@@ -127,7 +134,7 @@ const Board = () => {
     }
 
     const createList = () => {
-        dispatch(create_list_thunk(stringboardid))
+        dispatch(create_list_thunk(stringboardid, list_order_in_redux.length))
         // dispatch(getUserBoardData(stringboardid))
         return
     }
@@ -149,6 +156,48 @@ const Board = () => {
 
         )
 
+    const reorder = (list, startIndex, endIndex) => {
+        const result = list;
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+
+        return result;
+        };
+
+    const onDragEnd = (result) => {
+        // if (!result.destination) {
+        //     return;
+        //   }
+
+        //   if (result.destination.index === result.source.index) {
+        //     return;
+        //   }
+
+        //   const quotes = reorder(
+        //     state.quotes,
+        //     result.source.index,
+        //     result.destination.index
+        //   );
+
+        //   setState({ quotes });
+        console.log(result, "=======");
+        const order = reorder(
+            listorder,
+            result.source.index,
+            result.destination.index
+        )
+        console.log(order);
+        setlistorder(order)
+
+
+        dispatch(list_reorder_thunk(order, stringboardid))
+    };
+
+    const onDragStart = () => {
+        setlistorder(list_order_in_redux)
+        console.log(listorder);
+    }
+
     if(user.id !== board?.board_details?.user_id) {
         return (
             <div className='boardcontainer'>You do not own this board or this board does not exist</div>
@@ -161,13 +210,53 @@ const Board = () => {
         {board && <h1>{board.board_details.name}</h1>}
         {board && <button onClick={openModal}>Edit/Delete board</button>}
 
-            <div className="list-container">
-            {board && board.lists_in_board &&
-            list_to_array(board.lists_in_board).map((list) => (
-               <List list={list}/>
-            ))
-            }
-            </div>
+            <DragDropContext
+                onDragStart = {onDragStart}
+                // onDragUpdate
+                onDragEnd ={onDragEnd}
+            >
+
+            { board && board.list_order &&
+            <div className="border-1">
+            {/* // <div className="list-container"> */}
+            <Droppable droppableId={stringboardid} direction="horizontal" >
+                {(provided) => (
+
+                    <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className='boardDroppable'
+                    >
+
+                        {/* {list_to_array(board.lists_in_board).map((list, index) => (
+                        <List
+
+                        key={list.id}
+                        list={list}
+                        index={index}
+                        className="border-2"/>
+
+                         ))} */}
+
+                    {board.list_order.map((list, index) => (
+                        <List
+
+                        key={list.id}
+                        list={list}
+                        index={index}
+                        className="border-2"/>
+
+                         ))}
+
+
+
+                        {provided.placeholder}
+                 </div>
+
+                )}
+            </Droppable>
+                            {/* </div> */}
+            </div>}
 
             {board && <Modal
                         isOpen={modalIsOpen}
@@ -201,6 +290,7 @@ const Board = () => {
                     </Modal>}
 
             <button onClick={createList}>Create New List</button>
+        </DragDropContext>
         </div>
         </div>
     )
