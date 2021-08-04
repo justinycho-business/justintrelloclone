@@ -2,6 +2,8 @@ import { bodyOpenClassName } from "react-modal/lib/components/Modal";
 
 
 // Define action types
+const GET_HOME_BOARDS = 'board/GET_HOME_BOARDS'
+
 const GET_BOARDS = 'board/GET_BOARDS';
 
 const DELETE_LIST = 'board/DELETE_LIST';
@@ -19,6 +21,11 @@ const LIST_CHANGE_NAME = 'board/LIST_CHANGE_NAME'
 const BOARD_CHANGE_NAME = 'board/BOARD_CHANGE_NAME'
 
 // Action Creators
+const getHomeBoards = (userboards) => ({
+    type: GET_HOME_BOARDS,
+    payload: userboards
+})
+
 const getboardData = (userboards) => ({
     type: GET_BOARDS,
     payload: userboards
@@ -60,12 +67,27 @@ const list_reorder = (order) => ({
 })
 
 // Define Thunks
+export const getHomeBoardData = (userid) => async (dispatch) => {
+    const response = await fetch(`/api/board/user/${userid}`)
+
+    if(response.ok) {
+        const boardData = await response.json();
+        dispatch(getHomeBoards(boardData));
+        return true
+    } else{
+        return false
+    }
+}
+
 export const getUserBoardData = (boardid) => async (dispatch) => {
     const response = await fetch(`/api/board/${boardid}`)
 
     if(response.ok) {
         const boardData = await response.json();
         dispatch(getboardData(boardData));
+        return true
+    } else{
+        return false
     }
 }
 
@@ -82,6 +104,9 @@ export const delete_list_thunk = (listid, stringboardid) => async (dispatch) => 
     if(response.ok) {
         const listmsg = await response.json();
         dispatch(dltList(listmsg));
+        return true
+    } else{
+        return false
     }
 }
 
@@ -98,6 +123,9 @@ export const delete_board_thunk = (stringboardid) => async (dispatch) => {
     if(response.ok) {
         const deleteboard = await response.json();
         dispatch(dltBoard(deleteboard));
+        return true
+    } else{
+        return false
     }
 }
 
@@ -117,10 +145,14 @@ export const create_list_thunk = (boardid, listlength) => async (dispatch) => {
     if(response.ok) {
         const newlist = await response.json();
         dispatch(crtList(newlist));
+        return true
+    } else{
+        return false
     }
+
 }
 
-export const create_board_thunk = (userid) => async (dispatch) => {
+export const create_board_thunk = (userid, history) => async (dispatch) => {
     const response = await fetch(`/api/board/create-board/${userid}`, {
         method: ['POST'],
         headers: {
@@ -134,6 +166,11 @@ export const create_board_thunk = (userid) => async (dispatch) => {
     if(response.ok) {
         const newboard = await response.json();
         dispatch(crtBoard(newboard));
+        console.log(newboard);
+        history.push(`/board/${newboard['board_details']['id']}`)
+        return true
+    } else{
+        return false
     }
 }
 
@@ -153,6 +190,9 @@ export const change_list_name_thunk = (listid, listname, board_id) => async (dis
     if(response.ok) {
         const newlist = await response.json();
         dispatch(list_name_change(newlist));
+        return true
+    } else{
+        return false
     }
 }
 
@@ -172,6 +212,9 @@ export const change_board_name_thunk = (boardid, boardname, userid) => async (di
     if(response.ok) {
         const newboard = await response.json();
         dispatch(board_name_change(newboard));
+        return true
+    } else{
+        return false
     }
 }
 
@@ -191,6 +234,9 @@ export const list_reorder_thunk = (order, boardid) => async (dispatch) => {
     if(response.ok) {
         const neworder = await response.json();
         dispatch(list_reorder(neworder));
+        return true
+    } else{
+        return false
     }
 }
 // export const addFundsToPortfolio = (payload) => async (dispatch) => {
@@ -228,6 +274,8 @@ export default function boardReducer(state = initialState, action) {
     switch (action.type) {
         case GET_BOARDS:
             return {...state, board: action.payload }
+        case GET_HOME_BOARDS:
+            return {...state, userboards: action.payload }
         case DELETE_LIST:
             // return {...state, delete_list_msg: action.payload }
             let afterDeleteState = {...state}

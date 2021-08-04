@@ -1,8 +1,10 @@
 .boardcontainer {
-    display: block;
+    display: flex;
+    flex-direction: column;
     margin-top: 15vw;
     padding-top: 2vw;
-
+    align-items: center;
+    justify-content: flex-start;
     user-select: none;
     white-space: nowrap;
     margin-bottom: 8px;
@@ -15,12 +17,20 @@
     bottom: 0;
     left: 0;
 }
+
+.boardname{
+    color: blue;
+    padding-bottom: 5px;
+    font-size: 28px;
+}
 .border-1 {
     border: 2px solid blue;
+    border-radius: 10px;
 }
 
 .border-2 {
     border: 2px solid red;
+    border-radius: 10px;
 }
 
 .list-container{
@@ -38,4 +48,16 @@
     margin-left: 5px;
     margin-right: 5px;
     padding: 10px;
+}
+
+.board_button{
+    margin: 10px;
+    padding: 10px;
+    font-size: 15px;
+    background-color: lightpink;
+    border-radius: 10px;
+}
+
+.boardeditinput{
+    min-width: 90%;
 }

@@ -96,7 +96,10 @@ const Board = () => {
     const changeboardname = (boardid, board_name) => {
         function changeboardname2() {
             console.log('dispatch change_board_name_thunk');
-            dispatch(change_board_name_thunk(boardid, board_name, user.id));
+            const req = dispatch(change_board_name_thunk(boardid, board_name, user.id));
+            if (!req) {
+                window.alert('Error!')
+            }
             setboardname('');
             setIsOpen(false);
         }
@@ -108,9 +111,11 @@ const Board = () => {
         // delete board.lists_in_board[listid]
         const string_list_id = listid.toString()
         function dispatch_delete_list() {
-            console.log('inside dispatch_delete_list');
-            dispatch(delete_list_thunk(string_list_id, stringboardid))
-            console.log("after deleting");
+
+            const req = dispatch(delete_list_thunk(string_list_id, stringboardid))
+            if (!req) {
+                window.alert('Error!')
+            }
             // dispatch(getUserBoardData(stringboardid))
         }
 
@@ -122,9 +127,11 @@ const Board = () => {
         // e.preventDefault();
         // delete board.lists_in_board[listid]
         function dispatch_delete_board() {
-            console.log('inside dispatch_delete_board');
-            dispatch(delete_board_thunk(boardid))
-            console.log("after deleting");
+            const req = dispatch(delete_board_thunk(boardid))
+            if (!req) {
+                window.alert('Error!')
+            }
+
             history.push(`/`)
             // dispatch(getUserBoardData(stringboardid))
         }
@@ -134,15 +141,21 @@ const Board = () => {
     }
 
     const createList = () => {
-        dispatch(create_list_thunk(stringboardid, list_order_in_redux.length))
+        const req = dispatch(create_list_thunk(stringboardid, list_order_in_redux.length))
+        if (!req) {
+            window.alert('could not make list')
+
+        }
         // dispatch(getUserBoardData(stringboardid))
         return
     }
 
     useEffect(
             () => {
-                console.log("in useeffect")
-               dispatch(getUserBoardData(stringboardid))
+               const req = dispatch(getUserBoardData(stringboardid))
+               if (!req) {
+                window.alert('Error!')
+            }
             //    if (board.lists_in_board) {
             //     setlist_array(list_to_array(board.lists_in_board))
             //    }
@@ -165,37 +178,23 @@ const Board = () => {
         };
 
     const onDragEnd = (result) => {
-        // if (!result.destination) {
-        //     return;
-        //   }
 
-        //   if (result.destination.index === result.source.index) {
-        //     return;
-        //   }
-
-        //   const quotes = reorder(
-        //     state.quotes,
-        //     result.source.index,
-        //     result.destination.index
-        //   );
-
-        //   setState({ quotes });
-        console.log(result, "=======");
         const order = reorder(
             listorder,
             result.source.index,
             result.destination.index
         )
-        console.log(order);
         setlistorder(order)
 
 
-        dispatch(list_reorder_thunk(order, stringboardid))
+        const req = dispatch(list_reorder_thunk(order, stringboardid))
+        if (!req) {
+            window.alert('Error!')
+        }
     };
 
     const onDragStart = () => {
         setlistorder(list_order_in_redux)
-        console.log(listorder);
     }
 
     if(user.id !== board?.board_details?.user_id) {
@@ -207,8 +206,8 @@ const Board = () => {
     return (
         <div>
         <div className="boardcontainer">
-        {board && <h1>{board.board_details.name}</h1>}
-        {board && <button onClick={openModal}>Edit/Delete board</button>}
+        {board && <h1 className="boardname">{board.board_details.name}</h1>}
+        {board && <button className="board_button" onClick={openModal}>Edit/Delete board</button>}
 
             <DragDropContext
                 onDragStart = {onDragStart}
@@ -273,6 +272,7 @@ const Board = () => {
                         value={parseInt(list.id)}
                         /> */}
                         <input
+                        className="boardeditinput"
                         type='text'
                         placeholder="Give this board a new name"
                         name="editboardname"
@@ -284,12 +284,14 @@ const Board = () => {
                         <button>inside</button>
                         <button>the modal</button> */}
                         </form>
-                        <button onClick={changeboardname(stringboardid, boardname)}>Submit new name</button>
-                        <button onClick={deleteBoard(stringboardid)}>Delete This Board</button>
-                        <button onClick={closeModal}>close</button>
+                        <button className="board_button" onClick={changeboardname(stringboardid, boardname)}>Submit new name</button>
+                        <button className="board_button" onClick={deleteBoard(stringboardid)}>Delete This Board</button>
+                        <button className="board_button" onClick={closeModal}>close</button>
                     </Modal>}
 
-            <button onClick={createList}>Create New List</button>
+            <button
+             className="board_button"
+             onClick={createList}>Create New List</button>
         </DragDropContext>
         </div>
         </div>
