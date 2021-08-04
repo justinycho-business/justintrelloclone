@@ -53,7 +53,7 @@ function App() {
           <Home />
         </ProtectedRoute>
         <Route path='/'>
-          <h1 className='hi404'>404 error</h1>
+          <h1 className='hi404'>404 error. Try home!</h1>
         </Route>
       </Switch>
     </BrowserRouter>

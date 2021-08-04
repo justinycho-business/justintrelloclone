@@ -5,11 +5,13 @@ import {getUserBoardData,
         delete_list_thunk,
         create_list_thunk,
         change_list_name_thunk } from '../store/boards';
+import { get_card_data } from '../store/lists_store';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import './styles/List.css';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
+import Card from './Card'
 
 
 //styling for modal
@@ -59,8 +61,15 @@ const List = (props) => {
     const user = useSelector(state => state?.session?.user);
     const board = useSelector(state => state?.boards?.board)
     const b_trial = useSelector(state => state?.boards);
+    const all_lists = useSelector(state => Object.keys(state?.boards?.board?.lists_in_board));
+    const cards_exist = useSelector(state => state?.lists);
 
-
+    const card_filter = (array) => {
+        console.log(array, "line 68===========")
+        const filtered = array.filter(ele => parseInt(cards_exist[ele]['listid']) === parseInt(props.list.id))
+        const ordered_cards = filtered[0]['order']
+        return ordered_cards
+    }
     //make the constants needed for this component
     const list_to_array = (dict) => {
         let result = []
@@ -98,6 +107,20 @@ const List = (props) => {
         //useeffect
     }
 
+    useEffect(
+        () => {
+            console.log("in useeffect")
+            for(let i = 0; i < all_lists.length; i++) {
+                dispatch(get_card_data(all_lists[i]))
+            }
+
+        }
+        , [dispatch
+
+        ]
+
+    )
+
 
 
 
@@ -115,11 +138,32 @@ const List = (props) => {
                 <div className='list_in_board' key={props.list.id}>
                     {props.list.name}
                 </div>
-                <button onClick={deleteList(props.list.id)}>Delete This List</button>
-                <button onClick={
-                // listModal
+
+                <div className="card-container">
+                    {/* {cards_exist && Object.keys(cards_exist).length > 0 &&
+                    card_filter(Object.keys(cards_exist)).map((card, index) => (
+                        <Card
+                        key={card.id}
+                        card={card}
+                        index={index}
+                        className="border-3"/>
+
+                    ))
+
+
+
+                    } */}
+                </div>
+
+                <button
+                className="listbutton"
+                onClick={deleteList(props.list.id)}>Delete This List</button>
+                <button
+                className="listbutton"
+                onClick={
                 openModal
-                }>Open Modal Edit List</button>
+                }
+                >Open Modal Edit List</button>
                 {/* <Post post={post}/> */}
 
 
@@ -138,6 +182,7 @@ const List = (props) => {
                             value={parseInt(list.id)}
                             /> */}
                             <input
+                            className='listmodalinput'
                             type='text'
                             placeholder="Give this list a new name"
                             name="editlistname"
@@ -149,8 +194,12 @@ const List = (props) => {
                             <button>inside</button>
                             <button>the modal</button> */}
                             </form>
-                            <button onClick={changelistname(props.list.id.toString(), listname)}>Submit new name</button>
-                            <button onClick={closeModal}>close</button>
+                            <button
+                            className="listbutton"
+                            onClick={changelistname(props.list.id.toString(), listname)}>Submit new name</button>
+                            <button
+                            className="listbutton"
+                            onClick={closeModal}>close</button>
                         </Modal>
             {provided.placeholder}
 

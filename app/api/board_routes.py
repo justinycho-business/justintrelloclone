@@ -7,6 +7,20 @@ import os
 
 board_routes = Blueprint('board', __name__)
 
+@board_routes.route('/user/<int:userid>')
+@login_required
+def getuserboards(userid):
+
+    # step 1
+    boards = Board.query.filter_by(user_id = userid).all()
+
+    #step 2
+    boardarray = [board.to_dict() for board in boards]
+
+
+    return {
+        "userboards": boardarray
+    }
 
 @board_routes.route('/changename-board/<int:boardid>', methods=['PUT'])
 @login_required

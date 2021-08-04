@@ -14,26 +14,30 @@ const NavBar = () => {
   //check Redux
   const user = useSelector(state => state?.session?.user);
   const board0 = useSelector(state => state?.boards);
+  const board_details_id = useSelector(state => state?.boards?.board?.board_details?.id);
   const dispatch = useDispatch()
   const history = useHistory()
 
   const[newboardid, setnewboardid] = useState('hi')
 
-  function redirect() {
+  // function redirect() {
 
-    if(board0?.board?.board_details && newboardid !== 'hi') {
-    console.log(newboardid);
-    console.log(board0?.board?.board_details);
-    history.push(`/board/${board0?.board?.board_details?.id}`)
-    }
+  //   if(board0?.board?.board_details && newboardid === board0?.board?.board_details?.id) {
+  //   console.log(newboardid);
+  //   console.log(board0?.board?.board_details);
+  //   history.push(`/board/${board0?.board?.board_details?.id}`)
+  //   }
 
-  }
+  // }
 
   function createBoard() {
 
-        dispatch(create_board_thunk(user.id))
-        setnewboardid(board0?.board?.board_details?.id)
-        redirect()
+      dispatch(create_board_thunk(user.id, history))
+
+      // setnewboardid(board0?.board?.board_details?.id)
+
+      // history.push(`/board/${newboardid}`)
+
 
 
 
@@ -41,7 +45,10 @@ const NavBar = () => {
 
   }
 
-  useEffect(()=> {redirect()}, [createBoard])
+  // useEffect(
+  //   ()=> {
+  //     redirect()
+  //   }, [board_details_id])
 
   return (
     // <div className="navindiv">
@@ -53,27 +60,29 @@ const NavBar = () => {
           </NavLink>
         </div>
         {user !== null && <div className="navbardiv">
-          <button className = "navlink" onClick={createBoard}>fix + Board</button>
+          <button className = "navlink" onClick={createBoard}>Create New Board</button>
         </div>}
-        <div className="navbardiv">
+        {user == null && <div className="navbardiv">
           <NavLink to='/login' exact={true} activeClassName='active' className='navlink'>
             Login
           </NavLink>
-        </div>
-        <div className="navbardiv">
+        </div>}
+        {user == null && <div className="navbardiv">
           <NavLink to='/sign-up' exact={true} activeClassName='active' className='navlink'>
             Sign Up
           </NavLink>
-        </div>
+        </div>}
         {/* <div className="navbardiv">
           <NavLink to='/users' exact={true} activeClassName='active' className='navlink'>
             Users
           </NavLink>
         </div> */}
         {user !== null && <div className="navbarUL" className='navbardiv dropdown'>
-          User
-          <div className='dropdown-content'><LogoutButton /> </div>
-          <div className='dropdown-content'>hi </div>
+          User Menu
+          <div
+          className='dropdown-content'
+          ><LogoutButton /> </div>
+
         </div>}
     </nav>
 

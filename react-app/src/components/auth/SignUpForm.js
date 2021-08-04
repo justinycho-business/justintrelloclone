@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import { signUp } from '../../store/session';
+import '../../components/styles/SignUpForm.css'
 
 const SignUpForm = () => {
   const [errors, setErrors] = useState([]);
@@ -43,42 +44,48 @@ const SignUpForm = () => {
   }
 
   return (
-    <form onSubmit={onSignUp}>
-      <div>
+    <div className="signupcontainer">
+      <h1 className="SignUpFormTitle">Sign Up Form</h1>
+    <form className="SignUpForm" onSubmit={onSignUp}>
+      <div className="formdiv">
         {errors.map((error, ind) => (
           <div key={ind}>{error}</div>
         ))}
       </div>
-      <div>
-        <label>User Name</label>
+      <div className="formdiv">
+        <label>User Name: </label>
         <input
+        className='forminput'
           type='text'
           name='username'
           onChange={updateUsername}
           value={username}
         ></input>
       </div>
-      <div>
-        <label>Email</label>
+      <div className="formdiv">
+        <label>Email: </label>
         <input
+        className='forminput'
           type='text'
           name='email'
           onChange={updateEmail}
           value={email}
         ></input>
       </div>
-      <div>
-        <label>Password</label>
+      <div className="formdiv">
+        <label>Password: </label>
         <input
+        className='forminput'
           type='password'
           name='password'
           onChange={updatePassword}
           value={password}
         ></input>
       </div>
-      <div>
-        <label>Repeat Password</label>
+      <div className="formdiv">
+        <label>Repeat Password: </label>
         <input
+        className='forminput'
           type='password'
           name='repeat_password'
           onChange={updateRepeatPassword}
@@ -86,8 +93,11 @@ const SignUpForm = () => {
           required={true}
         ></input>
       </div>
-      <button type='submit'>Sign Up</button>
+      <div className='buttondiv'>
+      <button className="formbutton" type='submit'>Sign Up</button>
+      </div>
     </form>
+    </div>
   );
 };
 
