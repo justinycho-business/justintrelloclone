@@ -3,7 +3,9 @@ import { bodyOpenClassName } from "react-modal/lib/components/Modal";
 // Define action types
 const GET_CARDS = 'list/GET_CARDS';
 
-const CREATE_CARD = 'list/CREATE_CARD'
+const CREATE_CARD = 'list/CREATE_CARD';
+
+const CHANGE_CARD_NAME = 'list/CHANGE_CARD_NAME';
 
 // Action Creators
 const getcarddata = (carddata) => ({
@@ -13,6 +15,11 @@ const getcarddata = (carddata) => ({
 
 const create_card_data = (carddata) => ({
     type:  CREATE_CARD,
+    payload: carddata
+})
+
+const change_card_name = (carddata) => ({
+    type:  CHANGE_CARD_NAME,
     payload: carddata
 })
 
@@ -48,7 +55,29 @@ export const create_card_thunk = (listid, cardlength) => async (dispatch) => {
     }
 }
 
+export const change_card_name_thunk = (card_id, card_name, string_list_id) => async (dispatch) => {
+    const response = await fetch(`/api/list/change-name-card/${card_id}`, {
+        method: ['PUT'],
+        headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+           },
+           body: JSON.stringify({
+            'cardid': card_id,
+            'cardname': card_name,
+            'listid': string_list_id
+                                   })
 
+
+    })
+
+    if(response.ok) {
+        const card_data = await response.json();
+        dispatch(change_card_name(card_data));
+        console.log(card_data);
+    }
+
+}
 // Define initial state
 const initialState = {}
 
@@ -63,7 +92,10 @@ export default function listReducer(state = initialState, action) {
             let createCardState = {...state}
             createCardState[action.payload['listid']] = action.payload
             return createCardState
-
+        case CHANGE_CARD_NAME:
+            let changeCardName = {...state}
+            changeCardName[action.payload['listid']] = action.payload
+            return changeCardName
         // case DELETE_LIST:
         //     let afterDeleteState = {...state}
         //     afterDeleteState['board']['list_order'] = action.payload['list_order']

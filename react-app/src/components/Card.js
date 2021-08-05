@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { get_card_data,
-    create_card_thunk } from '../store/lists_store';
+    create_card_thunk,
+    change_card_name_thunk} from '../store/lists_store';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
@@ -25,7 +26,7 @@ const customStyles = {
 Modal.setAppElement(document.getElementById('root'))
 
 const Card = (props) => {
-
+    const dispatch = useDispatch();
      //modal stuff
      let subtitle;
      const [modalIsOpen, setIsOpen] = useState(false);
@@ -47,6 +48,20 @@ const Card = (props) => {
 
      //useState
      const [cardname, setcardname] = useState('')
+
+     //functions
+
+     const changecardname = (cardid, card_name) => {
+      function changecardname2() {
+          console.log('dispatch change_list_name_thunk');
+          dispatch(change_card_name_thunk(cardid, card_name, (props.card.list_id).toString()));
+          setcardname('');
+          setIsOpen(false);
+      }
+      return changecardname2
+  }
+
+
     return (
     <div className='card'>
         <div>{props.card.name}</div>
@@ -86,7 +101,7 @@ const Card = (props) => {
                             </form>
                             <button
                             className="cardbutton"
-                            // onClick={changelistname(props.list.id.toString(), listname)}
+                            onClick={changecardname(props.card.id.toString(), cardname)}
                             >Submit new name</button>
                             <button
                             className="cardbutton"

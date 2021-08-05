@@ -7,6 +7,57 @@ import os
 
 list_routes = Blueprint('list', __name__)
 
+@list_routes.route('/change-name-card/<int:cardid>', methods=['PUT'])
+@login_required
+def changenamecards(cardid):
+    # step 1
+    request_data_body = request.get_json()
+    cardname = request_data_body['cardname']
+    list__id = request_data_body['listid']
+
+    card_to_change = Card.query.get(cardid)
+    card_to_change.name = cardname
+
+    #step 2
+    db.session.commit()
+
+    # return {'message': f'List with ID of {listid} has been deleted'}
+    cards = Card.query.filter_by(list_id = int(list__id)).all()
+    cardsarray = [card.to_dict() for card in cards]
+
+    #step 5
+    cardsdict = {}
+
+    for card in cardsarray:
+        cardSingle = {}
+        cardSingle['id'] = card['id']
+        cardSingle['list_id'] = card['list_id']
+        cardSingle['name'] = card['name']
+        cardSingle['order'] = card['order']
+
+        cardsdict[card['id']] = cardSingle
+
+    #step 6
+    cardorder = []
+
+    x = 0
+    for i in range(len(cardsarray)):
+        for card in cardsarray:
+            if card['order'] == x:
+                cardorder.append(card)
+                x = x + 1
+
+
+    return {'lists_in_board': listsdict,
+            'list_order': listorder}
+
+    return {
+        'listid': int(list__id),
+        'dict': cardsdict,
+        'order': cardorder
+    }
+
+
 @list_routes.route('/create-card/<int:listid>', methods=['POST'])
 @login_required
 def createcards(listid):
