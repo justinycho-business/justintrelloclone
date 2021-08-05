@@ -180,13 +180,25 @@ def deletelist(listid):
 def deleteboard(boardid):
     board_to_dlt = Board.query.filter_by(id = boardid).first()
     # step 2
+    board_dict = board_to_dlt.to_dict()
+
+    userid = board_dict['user_id']
+
     db.session.delete(board_to_dlt)
     #step 3
     db.session.commit()
 
+    # step 1
+    boards = Board.query.filter_by(user_id = int(userid)).all()
+
+    #step 2
+    boardarray = [board.to_dict() for board in boards]
+
+
     return {'board_details': None,
             'lists_in_board': None,
-            "list_order": []
+            "list_order": [],
+            "userboards": boardarray
      }
 
 @board_routes.route('/create-list/<int:boardid>', methods=['POST'])

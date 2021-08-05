@@ -46,7 +46,7 @@ const Home = () => {
 
         <h2> My Boards </h2>
             <ul>
-                {userboards && userboards.userboards.map(board => (
+                {userboards && userboards.userboards && userboards.userboards.map(board => (
                     <li key={board.id}>
                         <button
                         className="boardbutton"

@@ -127,12 +127,12 @@ const Board = () => {
         // e.preventDefault();
         // delete board.lists_in_board[listid]
         function dispatch_delete_board() {
-            const req = dispatch(delete_board_thunk(boardid))
+            const req = dispatch(delete_board_thunk(boardid, history))
             if (!req) {
                 window.alert('Error!')
             }
 
-            history.push(`/`)
+            // history.push(`/`)
             // dispatch(getUserBoardData(stringboardid))
         }
 
