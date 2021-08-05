@@ -7,6 +7,8 @@ const CREATE_CARD = 'list/CREATE_CARD';
 
 const CHANGE_CARD_NAME = 'list/CHANGE_CARD_NAME';
 
+const DELETE_CARD = 'list/DELETE_CARD'
+
 // Action Creators
 const getcarddata = (carddata) => ({
     type:  GET_CARDS,
@@ -20,6 +22,11 @@ const create_card_data = (carddata) => ({
 
 const change_card_name = (carddata) => ({
     type:  CHANGE_CARD_NAME,
+    payload: carddata
+})
+
+const delete_card = (carddata) => ({
+    type:  DELETE_CARD,
     payload: carddata
 })
 
@@ -78,6 +85,28 @@ export const change_card_name_thunk = (card_id, card_name, string_list_id) => as
     }
 
 }
+
+export const delete_card_thunk = (cardid, listid) => async (dispatch) => {
+    const response = await fetch(`/api/list/delete-card/${cardid}`, {
+        method: ['DELETE'],
+        headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+           },
+           body: JSON.stringify({
+            'cardid': cardid,
+            'listid': listid
+                                   })
+
+
+    })
+
+    if(response.ok) {
+        const card_data = await response.json();
+        dispatch(delete_card(card_data));
+        console.log(card_data);
+    }
+}
 // Define initial state
 const initialState = {}
 
@@ -96,7 +125,11 @@ export default function listReducer(state = initialState, action) {
             let changeCardName = {...state}
             changeCardName[action.payload['listid']] = action.payload
             return changeCardName
-        // case DELETE_LIST:
+        case DELETE_CARD:
+            let deleteCardState = {...state}
+            deleteCardState[action.payload['listid']] = action.payload
+            return deleteCardState
+            // case DELETE_LIST:
         //     let afterDeleteState = {...state}
         //     afterDeleteState['board']['list_order'] = action.payload['list_order']
         //     afterDeleteState['board']['lists_in_board'] = action.payload['lists_in_board']

@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { get_card_data,
     create_card_thunk,
-    change_card_name_thunk} from '../store/lists_store';
+    change_card_name_thunk,
+    delete_card_thunk} from '../store/lists_store';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
@@ -61,6 +62,21 @@ const Card = (props) => {
       return changecardname2
   }
 
+  const deleteCard = (cardid) => {
+    // e.preventDefault();
+    // delete board.lists_in_board[listid]
+    const string_card_id = cardid.toString()
+    function dispatch_delete_card() {
+        console.log('inside dispatch_delete_list');
+        dispatch(delete_card_thunk(string_card_id, (props.card.list_id).toString()))
+        console.log("after deleting");
+        // dispatch(getUserBoardData(stringboardid))
+    }
+
+    return dispatch_delete_card
+    //useeffect
+}
+
 
     return (
     <div className='card'>
@@ -103,6 +119,9 @@ const Card = (props) => {
                             className="cardbutton"
                             onClick={changecardname(props.card.id.toString(), cardname)}
                             >Submit new name</button>
+                            <button
+                              className="cardbutton"
+                              onClick={deleteCard(props.card.id)}>Delete This Card</button>
                             <button
                             className="cardbutton"
                             onClick={closeModal}>close</button>
