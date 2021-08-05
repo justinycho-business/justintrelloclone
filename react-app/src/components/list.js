@@ -5,7 +5,8 @@ import {getUserBoardData,
         delete_list_thunk,
         create_list_thunk,
         change_list_name_thunk } from '../store/boards';
-import { get_card_data } from '../store/lists_store';
+import { get_card_data,
+    create_card_thunk } from '../store/lists_store';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
@@ -62,6 +63,7 @@ const List = (props) => {
     const board = useSelector(state => state?.boards?.board)
     const b_trial = useSelector(state => state?.boards);
     const all_lists = useSelector(state => Object.keys(state?.boards?.board?.lists_in_board));
+    const all_list_values = useSelector(state => Object.values(state?.boards?.board?.lists_in_board));
     const cards_exist = useSelector(state => state?.lists);
 
     const card_filter = (array) => {
@@ -112,12 +114,30 @@ const List = (props) => {
         //useeffect
     }
 
+    const createcard = (listid) => {
+        function dispatch_create_card() {
+            const step1 = cards_exist[listid.toString()]['order']
+            console.log(step1);
+            const cardlength = step1.length
+            console.log(cardlength);
+            const req = dispatch(create_card_thunk(listid, cardlength))
+        }
+        return dispatch_create_card
+    }
+
     useEffect(
         () => {
             console.log("in useeffect")
+            let x = 0;
             for(let i = 0; i < all_lists.length; i++) {
-                dispatch(get_card_data(all_lists[i]))
+                if (parseInt(all_lists[i]) === parseInt(props.list.id)) {
+                    console.log(all_lists[i]);
+                    let cardlength = all_list_values[i]['order']
+                    let integercardlength = cardlength.length
+                    const req = dispatch(get_card_data(all_lists[i]))
+                x += 1}
             }
+
 
         }
         , [dispatch
@@ -158,6 +178,10 @@ const List = (props) => {
 
 
                     }
+                     <button
+                className="listbutton"
+                onClick={createcard(props.list.id.toString())}>
+                    Create New Card</button>
                 </div>
 
                 <button

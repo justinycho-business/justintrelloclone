@@ -4,3 +4,8 @@
     padding: 5px;
     border-radius: 5px;
 }
+
+.cardbutton {
+    background-color: yellow;
+    border-radius: 5px;
+}
