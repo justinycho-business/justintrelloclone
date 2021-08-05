@@ -30,3 +30,10 @@
 .listmodalinput{
     min-width: 90%;
 }
+
+.card-container {
+    background-color: rgb(43, 243, 43);
+    margin: 5px;
+    padding: 20px;
+    border-radius: 5px;
+}

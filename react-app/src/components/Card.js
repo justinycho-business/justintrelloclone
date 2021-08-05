@@ -1,7 +1,12 @@
+import './styles/Card.css'
+
 const Card = (props) => {
-    <div>
+
+    return (
+    <div className='card'>
         {props.card.name}
     </div>
+    )
 }
 
 export default Card

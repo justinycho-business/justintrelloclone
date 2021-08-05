@@ -110,7 +110,7 @@ export const delete_list_thunk = (listid, stringboardid) => async (dispatch) => 
     }
 }
 
-export const delete_board_thunk = (stringboardid) => async (dispatch) => {
+export const delete_board_thunk = (stringboardid, history) => async (dispatch) => {
     const response = await fetch(`/api/board/delete-board/${stringboardid}`, {
         method: ['DELETE'],
         headers: {
@@ -123,6 +123,7 @@ export const delete_board_thunk = (stringboardid) => async (dispatch) => {
     if(response.ok) {
         const deleteboard = await response.json();
         dispatch(dltBoard(deleteboard));
+        history.push(`/`)
         return true
     } else{
         return false
@@ -301,6 +302,7 @@ export default function boardReducer(state = initialState, action) {
             return  afterChangeBoardNameState
         case DELETE_BOARD:
             let afterDeleteBoardNameState = {...state}
+            afterDeleteBoardNameState['userboards']['userboards'] = action.payload["userboards"]
             afterDeleteBoardNameState['board'] = action.payload
             return  afterDeleteBoardNameState
         case CREATE_BOARD:

@@ -67,8 +67,13 @@ const List = (props) => {
     const card_filter = (array) => {
         console.log(array, "line 68===========")
         const filtered = array.filter(ele => parseInt(ele['listid']) === parseInt(props.list.id))
+        if(filtered.length > 0) {
         const ordered_cards = filtered[0]['order']
         return ordered_cards
+    }
+    else {
+        return []
+    }
     }
     //make the constants needed for this component
     const list_to_array = (dict) => {
