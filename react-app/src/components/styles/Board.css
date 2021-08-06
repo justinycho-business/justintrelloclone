@@ -1,7 +1,7 @@
 .boardcontainer {
     display: flex;
     flex-direction: column;
-    margin-top: 15vw;
+    margin-top: 75px;
     padding-top: 2vw;
     align-items: center;
     justify-content: flex-start;
@@ -9,7 +9,7 @@
     white-space: nowrap;
     margin-bottom: 8px;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: auto;
     padding-bottom: 8px;
     position: absolute;
     top: 0;

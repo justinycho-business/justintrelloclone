@@ -8,6 +8,7 @@ import {getUserBoardData,
         delete_board_thunk,
         list_reorder_thunk,
         change_list_name_thunk } from '../store/boards';
+import {card_reorder_same_list_thunk, card_reorder_both_thunk} from '../store/lists_store'
 import React from 'react';
 import List from './list';
 import ReactDOM from 'react-dom';
@@ -67,7 +68,7 @@ const Board = () => {
     const board = useSelector(state => state?.boards?.board)
     const b_trial = useSelector(state => state?.boards);
     const list_order_in_redux = useSelector(state => state?.boards?.board?.list_order);
-
+    const card_orders = useSelector(state => state?.lists);
 
 
     //make the constants needed for this component
@@ -81,6 +82,8 @@ const Board = () => {
     }
     const [boardname, setboardname] = useState('')
     const [listorder, setlistorder] = useState([])
+    const [listorder_2, setlistorder2] = useState([])
+
     // const [list_array, setlist_array] = useState([])
 
     // const changelistname = (listid, list_name) => {
@@ -95,7 +98,6 @@ const Board = () => {
 
     const changeboardname = (boardid, board_name) => {
         function changeboardname2() {
-            console.log('dispatch change_board_name_thunk');
             const req = dispatch(change_board_name_thunk(boardid, board_name, user.id));
             if (!req) {
                 window.alert('Error!')
@@ -178,24 +180,130 @@ const Board = () => {
         };
 
     const onDragEnd = (result) => {
+        const { source, destination, draggableId } = result;
 
-        const order = reorder(
-            listorder,
-            result.source.index,
-            result.destination.index
-        )
-        setlistorder(order)
+        if (!destination) {
+            return;
+        }
+
+        if (source.droppableId.startsWith("list") && !destination.droppableId.startsWith("list")) {
+            return
+        }
+
+        if (!source.droppableId.startsWith("list") && destination.droppableId.startsWith("list")) {
+            return
+        }
 
 
-        const req = dispatch(list_reorder_thunk(order, stringboardid))
-        if (!req) {
+        function extract(string) {
+            let splitty = string.split('-')
+            const list_id = parseInt(splitty[1])
+            return list_id
+        }
+
+
+        if (draggableId.startsWith('card')) {
+            if (!destination) {
+                return;
+            }
+
+            if (source.droppableId.startsWith("list") && !destination.droppableId.startsWith("list")) {
+                return
+            }
+
+            if (!source.droppableId.startsWith("list") && destination.droppableId.startsWith("list")) {
+                return
+            }
+
+            if (destination.droppableId === source.droppableId) {
+
+                let listid = extract(destination.droppableId)
+
+                let list_array;
+
+                for (let i = 0; i < listorder_2.length; i++) {
+                    if (listorder_2[i]['listid'] === listid) {
+                        list_array = listorder_2[i]['order']
+                    }
+                }
+
+                const order_2 = reorder(
+                    list_array,
+                    result.source.index,
+                    result.destination.index
+                )
+                const req = dispatch(card_reorder_same_list_thunk(order_2, listid.toString()))
+
+                return
+
+
+            }
+
+            if (source.droppableId.startsWith("list") && destination.droppableId.startsWith("list")
+                && extract(source.droppableId) !== extract(destination.droppableId)) {
+
+                let sourcelistid = extract(source.droppableId);
+                let destinationlistid = extract(destination.droppableId);
+
+                let source_list_array;
+                let destination_list_array;
+
+                for (let i = 0; i < listorder_2.length; i++) {
+                    if (listorder_2[i]['listid'] === sourcelistid) {
+                        source_list_array = listorder_2[i]['order']
+                    }
+                    if (listorder_2[i]['listid'] === destinationlistid) {
+                        destination_list_array = listorder_2[i]['order']
+                    }
+                }
+
+                const card_moved = source_list_array.splice(source.index, 1);
+                const new_source_list_array = source_list_array;
+
+
+                const [removed] = card_moved
+                destination_list_array.splice(destination.index, 0, removed);
+                const new_destination_list_array = destination_list_array;
+
+                const req = dispatch(card_reorder_both_thunk(sourcelistid,
+                                                             destinationlistid,
+                                                             removed,
+                                                             new_source_list_array,
+                                                             new_destination_list_array,
+                                                             destination.index ))
+
+                }
+        }
+
+        if (draggableId.startsWith('list')) {
+            if (!destination) {
+                return;
+            }
+            const order = reorder(
+                listorder,
+                result.source.index,
+                result.destination.index
+            )
+
+            setlistorder(order);
+            const req = dispatch(list_reorder_thunk(order, stringboardid))
+            if (!req) {
             window.alert('Error!')
         }
+
+        }
+
+        return
     };
 
     const onDragStart = () => {
         setlistorder(list_order_in_redux)
+        if(card_orders) {
+        setlistorder2(Object.values(card_orders))
+        }
     }
+
+
 
     if(user.id !== board?.board_details?.user_id) {
         return (
@@ -218,7 +326,7 @@ const Board = () => {
             { board && board.list_order &&
             <div className="border-1">
             {/* // <div className="list-container"> */}
-            <Droppable droppableId={stringboardid} direction="horizontal" >
+            <Droppable droppableId={stringboardid} type="COLUMN" direction="horizontal" >
                 {(provided) => (
 
                     <div

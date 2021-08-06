@@ -5,7 +5,8 @@ import {getUserBoardData,
         delete_list_thunk,
         create_list_thunk,
         change_list_name_thunk } from '../store/boards';
-import { get_card_data } from '../store/lists_store';
+import { get_card_data,
+    create_card_thunk } from '../store/lists_store';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
@@ -36,6 +37,8 @@ const List = (props) => {
 
     //modal stuff
     let subtitle;
+
+    const [dragBlocking, setdragblocking] = useState(false);
     const [modalIsOpen, setIsOpen] = useState(false);
 
     function openModal() {
@@ -62,10 +65,11 @@ const List = (props) => {
     const board = useSelector(state => state?.boards?.board)
     const b_trial = useSelector(state => state?.boards);
     const all_lists = useSelector(state => Object.keys(state?.boards?.board?.lists_in_board));
+    const all_list_values = useSelector(state => Object.values(state?.boards?.board?.lists_in_board));
     const cards_exist = useSelector(state => state?.lists);
 
     const card_filter = (array) => {
-        console.log(array, "line 68===========")
+        // console.log(array, "line 68===========")
         const filtered = array.filter(ele => parseInt(ele['listid']) === parseInt(props.list.id))
         if(filtered.length > 0) {
         const ordered_cards = filtered[0]['order']
@@ -89,7 +93,7 @@ const List = (props) => {
 
     const changelistname = (listid, list_name) => {
         function changelistname2() {
-            console.log('dispatch change_list_name_thunk');
+
             dispatch(change_list_name_thunk(listid, list_name, stringboardid));
             setlistname('');
             setIsOpen(false);
@@ -102,9 +106,9 @@ const List = (props) => {
         // delete board.lists_in_board[listid]
         const string_list_id = listid.toString()
         function dispatch_delete_list() {
-            console.log('inside dispatch_delete_list');
+
             dispatch(delete_list_thunk(string_list_id, stringboardid))
-            console.log("after deleting");
+
             // dispatch(getUserBoardData(stringboardid))
         }
 
@@ -112,12 +116,27 @@ const List = (props) => {
         //useeffect
     }
 
+    const createcard = (listid) => {
+        function dispatch_create_card() {
+            const step1 = cards_exist[listid.toString()]['order']
+            const cardlength = step1.length
+            const req = dispatch(create_card_thunk(listid, cardlength))
+        }
+        return dispatch_create_card
+    }
+
     useEffect(
         () => {
-            console.log("in useeffect")
+
+            let x = 0;
             for(let i = 0; i < all_lists.length; i++) {
-                dispatch(get_card_data(all_lists[i]))
+                if (parseInt(all_lists[i]) === parseInt(props.list.id)) {
+                    let cardlength = all_list_values[i]['order']
+                    let integercardlength = cardlength.length
+                    const req = dispatch(get_card_data(all_lists[i]))
+                x += 1}
             }
+
 
         }
         , [dispatch
@@ -130,19 +149,38 @@ const List = (props) => {
 
 
     return (
-    <Draggable draggableId = {props.list.id.toString()} index={props.index}>
+        <>
+    <Draggable
+    disableInteractiveElementBlocking={!dragBlocking}
+    draggableId = {`list-${props.list.id.toString()}`}
+    index={props.index}
+    >
         {(provided) => (
+
             <div
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref = {provided.innerRef}
             className='border-2'
             >
+                <div
+                className='list_in_board'
+                key={props.list.id}
+                // setdragblocking={dragBlocking}
 
-
-                <div className='list_in_board' key={props.list.id}>
+                >
                     {props.list.name}
                 </div>
+                <Droppable droppableId={`list-${props.list.id.toString()}` } type="LIST">
+                {(provided) => (
+            <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                // className='boardDroppable'
+                >
+                {/* <div className='list_in_board' key={props.list.id}>
+                    {props.list.name}
+                </div> */}
 
                 <div className="card-container">
                     {Object.keys(cards_exist).length > 0 &&
@@ -158,6 +196,10 @@ const List = (props) => {
 
 
                     }
+                     <button
+                className="listbutton"
+                onClick={createcard(props.list.id.toString())}>
+                    Create New Card</button>
                 </div>
 
                 <button
@@ -172,40 +214,10 @@ const List = (props) => {
                 {/* <Post post={post}/> */}
 
 
-                <Modal
-                            isOpen={modalIsOpen}
-                            onAfterOpen={afterOpenModal}
-                            onRequestClose={closeModal}
-                            style={customStyles}
-                            contentLabel={props.list.name}
-                        >
-                            <h2 ref={(_subtitle) => (subtitle = _subtitle)}>{props.list.name}</h2>
-                            <div>Edit List </div>
-                            <form>
-                            {/* <input
-                            type='hidden'
-                            value={parseInt(list.id)}
-                            /> */}
-                            <input
-                            className='listmodalinput'
-                            type='text'
-                            placeholder="Give this list a new name"
-                            name="editlistname"
-                            value={listname}
-                            onChange={(e) => setlistname(e.target.value)}
-                            />
-                            {/* <button onClick={changelistname(list.id.toString(), listname)}>Submit new name</button> */}
-                            {/* <button>stays</button>
-                            <button>inside</button>
-                            <button>the modal</button> */}
-                            </form>
-                            <button
-                            className="listbutton"
-                            onClick={changelistname(props.list.id.toString(), listname)}>Submit new name</button>
-                            <button
-                            className="listbutton"
-                            onClick={closeModal}>close</button>
-                        </Modal>
+
+         </div>
+                        )}
+                        </Droppable>
             {provided.placeholder}
 
 
@@ -219,6 +231,42 @@ const List = (props) => {
         )}
 
     </Draggable>
+
+<Modal
+isOpen={modalIsOpen}
+onAfterOpen={afterOpenModal}
+onRequestClose={closeModal}
+style={customStyles}
+contentLabel={props.list.name}
+>
+<h2 ref={(_subtitle) => (subtitle = _subtitle)}>{props.list.name}</h2>
+<div>Edit List </div>
+<form>
+{/* <input
+type='hidden'
+value={parseInt(list.id)}
+/> */}
+<input
+className='listmodalinput'
+type='text'
+placeholder="Give this list a new name"
+name="editlistname"
+value={listname}
+onChange={(e) => setlistname(e.target.value)}
+/>
+{/* <button onClick={changelistname(list.id.toString(), listname)}>Submit new name</button> */}
+{/* <button>stays</button>
+<button>inside</button>
+<button>the modal</button> */}
+</form>
+<button
+className="listbutton"
+onClick={changelistname(props.list.id.toString(), listname)}>Submit new name</button>
+<button
+className="listbutton"
+onClick={closeModal}>close</button>
+</Modal>
+</>
 
     )
 }

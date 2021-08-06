@@ -9,7 +9,9 @@ import UsersList from './components/UsersList';
 import User from './components/User';
 import Home from './components/Home';
 import Board from './components/board';
-import './components/styles/App.css'
+import Footer from './components/footer';
+import './components/styles/App.css';
+
 import { authenticate } from './store/session';
 
 function App() {
@@ -56,6 +58,7 @@ function App() {
           <h1 className='hi404'>404 error. Try home!</h1>
         </Route>
       </Switch>
+    <Footer/>
     </BrowserRouter>
   );
 }

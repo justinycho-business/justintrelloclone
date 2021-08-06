@@ -167,7 +167,6 @@ export const create_board_thunk = (userid, history) => async (dispatch) => {
     if(response.ok) {
         const newboard = await response.json();
         dispatch(crtBoard(newboard));
-        console.log(newboard);
         history.push(`/board/${newboard['board_details']['id']}`)
         return true
     } else{
