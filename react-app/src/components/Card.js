@@ -139,10 +139,10 @@ useEffect(
                             value={cardname}
                             onChange={(e) => setcardname(e.target.value)}
                             />
-                            <button
+                            {/* <button
                             className="cardbutton"
                             onClick={changecardname(props.card.id.toString(), cardname)}
-                            >Submit new name</button>
+                            >Submit new name</button> */}
                             {/* <button onClick={changelistname(list.id.toString(), listname)}>Submit new name</button> */}
                             {/* <button>stays</button>
                             <button>inside</button>
@@ -152,6 +152,10 @@ useEffect(
                             className="cardbutton"
                             onClick={changecardname(props.card.id.toString(), cardname)}
                             >Submit new name</button> */}
+                            <button
+                            className="cardbutton"
+                            onClick={changecardname(props.card.id.toString(), cardname)}
+                            >Submit new name</button>
                             <div className="checklist_container">
 
                             </div>
