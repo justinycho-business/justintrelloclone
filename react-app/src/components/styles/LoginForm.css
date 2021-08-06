@@ -30,6 +30,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 
 }
 
@@ -48,4 +49,10 @@
     align-items: center;
     width: 50vw;
     justify-content: center;
+}
+
+.errormsg{
+    color: red;
+    background-color: yellow;
+    padding: 7px;
 }

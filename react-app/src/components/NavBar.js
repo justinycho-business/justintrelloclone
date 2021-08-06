@@ -56,7 +56,7 @@ const NavBar = () => {
       {/* <ul className="navbarUL"> */}
       <div className="navbardiv">
           <NavLink to='/' exact={true} activeClassName='active' className='navlink'>
-            Home
+            Home/My Boards
           </NavLink>
         </div>
         {user !== null && <div className="navbardiv">
