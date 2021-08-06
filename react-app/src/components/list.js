@@ -37,6 +37,8 @@ const List = (props) => {
 
     //modal stuff
     let subtitle;
+
+    const [dragBlocking, setdragblocking] = useState(false);
     const [modalIsOpen, setIsOpen] = useState(false);
 
     function openModal() {
@@ -67,7 +69,7 @@ const List = (props) => {
     const cards_exist = useSelector(state => state?.lists);
 
     const card_filter = (array) => {
-        console.log(array, "line 68===========")
+        // console.log(array, "line 68===========")
         const filtered = array.filter(ele => parseInt(ele['listid']) === parseInt(props.list.id))
         if(filtered.length > 0) {
         const ordered_cards = filtered[0]['order']
@@ -127,11 +129,10 @@ const List = (props) => {
 
     useEffect(
         () => {
-            console.log("in useeffect")
+
             let x = 0;
             for(let i = 0; i < all_lists.length; i++) {
                 if (parseInt(all_lists[i]) === parseInt(props.list.id)) {
-                    console.log(all_lists[i]);
                     let cardlength = all_list_values[i]['order']
                     let integercardlength = cardlength.length
                     const req = dispatch(get_card_data(all_lists[i]))
@@ -150,19 +151,38 @@ const List = (props) => {
 
 
     return (
-    <Draggable draggableId = {props.list.id.toString()} index={props.index}>
+        <>
+    <Draggable
+    disableInteractiveElementBlocking={!dragBlocking}
+    draggableId = {`list-${props.list.id.toString()}`}
+    index={props.index}
+    >
         {(provided) => (
+
             <div
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref = {provided.innerRef}
             className='border-2'
             >
+                <div
+                className='list_in_board'
+                key={props.list.id}
+                // setdragblocking={dragBlocking}
 
-
-                <div className='list_in_board' key={props.list.id}>
+                >
                     {props.list.name}
                 </div>
+                <Droppable droppableId={`list-${props.list.id.toString()}` } type="LIST">
+                {(provided) => (
+            <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                // className='boardDroppable'
+                >
+                {/* <div className='list_in_board' key={props.list.id}>
+                    {props.list.name}
+                </div> */}
 
                 <div className="card-container">
                     {Object.keys(cards_exist).length > 0 &&
@@ -196,40 +216,10 @@ const List = (props) => {
                 {/* <Post post={post}/> */}
 
 
-                <Modal
-                            isOpen={modalIsOpen}
-                            onAfterOpen={afterOpenModal}
-                            onRequestClose={closeModal}
-                            style={customStyles}
-                            contentLabel={props.list.name}
-                        >
-                            <h2 ref={(_subtitle) => (subtitle = _subtitle)}>{props.list.name}</h2>
-                            <div>Edit List </div>
-                            <form>
-                            {/* <input
-                            type='hidden'
-                            value={parseInt(list.id)}
-                            /> */}
-                            <input
-                            className='listmodalinput'
-                            type='text'
-                            placeholder="Give this list a new name"
-                            name="editlistname"
-                            value={listname}
-                            onChange={(e) => setlistname(e.target.value)}
-                            />
-                            {/* <button onClick={changelistname(list.id.toString(), listname)}>Submit new name</button> */}
-                            {/* <button>stays</button>
-                            <button>inside</button>
-                            <button>the modal</button> */}
-                            </form>
-                            <button
-                            className="listbutton"
-                            onClick={changelistname(props.list.id.toString(), listname)}>Submit new name</button>
-                            <button
-                            className="listbutton"
-                            onClick={closeModal}>close</button>
-                        </Modal>
+
+         </div>
+                        )}
+                        </Droppable>
             {provided.placeholder}
 
 
@@ -243,6 +233,42 @@ const List = (props) => {
         )}
 
     </Draggable>
+
+<Modal
+isOpen={modalIsOpen}
+onAfterOpen={afterOpenModal}
+onRequestClose={closeModal}
+style={customStyles}
+contentLabel={props.list.name}
+>
+<h2 ref={(_subtitle) => (subtitle = _subtitle)}>{props.list.name}</h2>
+<div>Edit List </div>
+<form>
+{/* <input
+type='hidden'
+value={parseInt(list.id)}
+/> */}
+<input
+className='listmodalinput'
+type='text'
+placeholder="Give this list a new name"
+name="editlistname"
+value={listname}
+onChange={(e) => setlistname(e.target.value)}
+/>
+{/* <button onClick={changelistname(list.id.toString(), listname)}>Submit new name</button> */}
+{/* <button>stays</button>
+<button>inside</button>
+<button>the modal</button> */}
+</form>
+<button
+className="listbutton"
+onClick={changelistname(props.list.id.toString(), listname)}>Submit new name</button>
+<button
+className="listbutton"
+onClick={closeModal}>close</button>
+</Modal>
+</>
 
     )
 }

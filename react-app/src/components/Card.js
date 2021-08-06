@@ -49,6 +49,7 @@ const Card = (props) => {
 
      //useState
      const [cardname, setcardname] = useState('')
+     const [dragBlocking, setdragblocking] = useState(false);
 
      //functions
 
@@ -79,7 +80,17 @@ const Card = (props) => {
 
 
     return (
-    <div className='card'>
+      <Draggable
+      disableInteractiveElementBlocking={!dragBlocking}
+      draggableId={`card-${props.card.id.toString()}`}
+      index={props.index}
+      >
+        {(provided) => (
+    <div
+    {...provided.draggableProps}
+    {...provided.dragHandleProps}
+    ref = {provided.innerRef}
+    className='card'>
         <div>{props.card.name}</div>
         <button
             className="cardbutton"
@@ -110,15 +121,20 @@ const Card = (props) => {
                             value={cardname}
                             onChange={(e) => setcardname(e.target.value)}
                             />
+                            <button
+                            className="cardbutton"
+                            onClick={changecardname(props.card.id.toString(), cardname)}
+                            >Submit new name</button>
                             {/* <button onClick={changelistname(list.id.toString(), listname)}>Submit new name</button> */}
                             {/* <button>stays</button>
                             <button>inside</button>
                             <button>the modal</button> */}
                             </form>
-                            <button
+                            {/* <button
                             className="cardbutton"
                             onClick={changecardname(props.card.id.toString(), cardname)}
-                            >Submit new name</button>
+                            >Submit new name</button> */}
+
                             <button
                               className="cardbutton"
                               onClick={deleteCard(props.card.id)}>Delete This Card</button>
@@ -132,6 +148,8 @@ const Card = (props) => {
 
 
     </div>
+    )}
+    </Draggable>
     )
 }
 
