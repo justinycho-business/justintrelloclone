@@ -78,6 +78,13 @@ const Card = (props) => {
     //useeffect
 }
 
+useEffect(
+  () => {
+
+  }
+  , [dispatch]
+)
+
 
     return (
       <Draggable
@@ -134,7 +141,9 @@ const Card = (props) => {
                             className="cardbutton"
                             onClick={changecardname(props.card.id.toString(), cardname)}
                             >Submit new name</button> */}
+                            <div className="checklist_container">
 
+                            </div>
                             <button
                               className="cardbutton"
                               onClick={deleteCard(props.card.id)}>Delete This Card</button>
