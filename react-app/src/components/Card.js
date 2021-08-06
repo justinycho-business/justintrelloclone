@@ -5,6 +5,7 @@ import { get_card_data,
     create_card_thunk,
     change_card_name_thunk,
     delete_card_thunk} from '../store/lists_store';
+    import {get_checklists_for_card} from "../store/cards_store"
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
@@ -57,7 +58,7 @@ const Card = (props) => {
 
      const changecardname = (cardid, card_name) => {
       function changecardname2() {
-          console.log('dispatch change_list_name_thunk');
+
           dispatch(change_card_name_thunk(cardid, card_name, (props.card.list_id).toString()));
           setcardname('');
           setIsOpen(false);
@@ -70,9 +71,7 @@ const Card = (props) => {
     // delete board.lists_in_board[listid]
     const string_card_id = cardid.toString()
     function dispatch_delete_card() {
-        console.log('inside dispatch_delete_list');
         dispatch(delete_card_thunk(string_card_id, (props.card.list_id).toString()))
-        console.log("after deleting");
         // dispatch(getUserBoardData(stringboardid))
     }
 
@@ -82,16 +81,16 @@ const Card = (props) => {
 
 useEffect(
   () => {
-    let card_list = Object.values(cards_exist);
-    let array_of_cards = [];
-    for (let i = 0; i < card_list.length; i++) {
-      const cardsarray = card_list[i]['order']
-      for (let j = 0; j < cardsarray.length; j++) {
-        if (parseInt(cardsarray[j]['id']) === parseInt(props.card.id)) {
-          const req = dispatch(get_checklists_for_card(cardsarray[j]['id']))
-        }
-      }
-    }
+    // let card_list = Object.values(cards_exist);
+    // let array_of_cards = [];
+    // for (let i = 0; i < card_list.length; i++) {
+    //   const cardsarray = card_list[i]['order']
+    //   for (let j = 0; j < cardsarray.length; j++) {
+    //     if (parseInt(cardsarray[j]['id']) === parseInt(props.card.id)) {
+    //       const req = dispatch(get_checklists_for_card(cardsarray[j]['id']))
+    //     }
+    //   }
+    // }
 
   }
   , [dispatch]

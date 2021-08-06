@@ -103,7 +103,6 @@ export const get_card_data = (listid) => async (dispatch) => {
     if(response.ok) {
         const card_data = await response.json();
         dispatch(getcarddata(card_data));
-        // console.log(card_data);
     }
 }
 
@@ -123,7 +122,7 @@ export const create_card_thunk = (listid, cardlength) => async (dispatch) => {
     if(response.ok) {
         const card_data = await response.json();
         dispatch(create_card_data(card_data));
-        console.log(card_data);
+
     }
 }
 
@@ -146,7 +145,6 @@ export const change_card_name_thunk = (card_id, card_name, string_list_id) => as
     if(response.ok) {
         const card_data = await response.json();
         dispatch(change_card_name(card_data));
-        console.log(card_data);
     }
 
 }
@@ -169,7 +167,7 @@ export const delete_card_thunk = (cardid, listid) => async (dispatch) => {
     if(response.ok) {
         const card_data = await response.json();
         dispatch(delete_card(card_data));
-        console.log(card_data);
+
     }
 }
 // Define initial state

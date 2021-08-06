@@ -98,7 +98,6 @@ const Board = () => {
 
     const changeboardname = (boardid, board_name) => {
         function changeboardname2() {
-            console.log('dispatch change_board_name_thunk');
             const req = dispatch(change_board_name_thunk(boardid, board_name, user.id));
             if (!req) {
                 window.alert('Error!')
@@ -202,7 +201,6 @@ const Board = () => {
             return list_id
         }
 
-        console.log(result);
 
         if (draggableId.startsWith('card')) {
             if (!destination) {

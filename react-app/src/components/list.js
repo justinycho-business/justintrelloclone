@@ -93,7 +93,7 @@ const List = (props) => {
 
     const changelistname = (listid, list_name) => {
         function changelistname2() {
-            console.log('dispatch change_list_name_thunk');
+
             dispatch(change_list_name_thunk(listid, list_name, stringboardid));
             setlistname('');
             setIsOpen(false);
@@ -106,9 +106,9 @@ const List = (props) => {
         // delete board.lists_in_board[listid]
         const string_list_id = listid.toString()
         function dispatch_delete_list() {
-            console.log('inside dispatch_delete_list');
+
             dispatch(delete_list_thunk(string_list_id, stringboardid))
-            console.log("after deleting");
+
             // dispatch(getUserBoardData(stringboardid))
         }
 
@@ -119,9 +119,7 @@ const List = (props) => {
     const createcard = (listid) => {
         function dispatch_create_card() {
             const step1 = cards_exist[listid.toString()]['order']
-            console.log(step1);
             const cardlength = step1.length
-            console.log(cardlength);
             const req = dispatch(create_card_thunk(listid, cardlength))
         }
         return dispatch_create_card
