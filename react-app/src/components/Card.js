@@ -51,6 +51,8 @@ const Card = (props) => {
      const [cardname, setcardname] = useState('')
      const [dragBlocking, setdragblocking] = useState(false);
 
+     const cards_exist = useSelector(state => state?.lists)
+
      //functions
 
      const changecardname = (cardid, card_name) => {
@@ -80,6 +82,16 @@ const Card = (props) => {
 
 useEffect(
   () => {
+    let card_list = Object.values(cards_exist);
+    let array_of_cards = [];
+    for (let i = 0; i < card_list.length; i++) {
+      const cardsarray = card_list[i]['order']
+      for (let j = 0; j < cardsarray.length; j++) {
+        if (parseInt(cardsarray[j]['id']) === parseInt(props.card.id)) {
+          const req = dispatch(get_checklists_for_card(cardsarray[j]['id']))
+        }
+      }
+    }
 
   }
   , [dispatch]
