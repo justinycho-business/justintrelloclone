@@ -3,9 +3,16 @@ import { bodyOpenClassName } from "react-modal/lib/components/Modal";
 // Define action types
 const GET_CHECKLISTS = 'cards/GET_CHECKLISTS';
 
+const CREATE_CHECKLISTS = 'cards/CREATE_CHECKLISTS';
+
 // Action Creators
 const getchecklistdata = (checklistdata) => ({
     type:  GET_CHECKLISTS,
+    payload: checklistdata
+})
+
+const create_checklist = (checklistdata) => ({
+    type:  CREATE_CHECKLISTS,
     payload: checklistdata
 })
 
@@ -20,6 +27,25 @@ export const get_checklists_for_card = (cardid) => async (dispatch) => {
     }
 }
 
+export const create_checklist_thunk = (cardid) => async (dispatch) => {
+    const response = await fetch(`/api/card/create-checklist/${cardid}`, {
+        method: ['POST'],
+        headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+           },
+           body: JSON.stringify({ 'cardid': cardid
+                                   })
+
+    })
+
+    if(response.ok) {
+        const checklist_data = await response.json();
+        dispatch(create_checklist(checklist_data));
+        // console.log(card_data);
+    }
+}
+
 // Define initial state
 const initialState = {}
 
@@ -30,7 +56,10 @@ export default function cardReducer(state = initialState, action) {
             let getChecklistsState = {...state}
             getChecklistsState[action.payload['cardid']] = action.payload
             return getChecklistsState
-
+        case CREATE_CHECKLISTS:
+            let createChecklistState = {...state}
+            createChecklistState[action.payload['cardid']] = action.payload
+            return createChecklistState
         default:
             return state;
     };

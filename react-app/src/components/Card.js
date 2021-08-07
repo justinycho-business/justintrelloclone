@@ -5,10 +5,12 @@ import { get_card_data,
     create_card_thunk,
     change_card_name_thunk,
     delete_card_thunk} from '../store/lists_store';
-    import {get_checklists_for_card} from "../store/cards_store"
+    import {get_checklists_for_card,
+      create_checklist_thunk} from "../store/cards_store"
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
+import Checklist from './Checklist';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import './styles/Card.css'
 
@@ -52,7 +54,8 @@ const Card = (props) => {
      const [cardname, setcardname] = useState('')
      const [dragBlocking, setdragblocking] = useState(false);
 
-     const cards_exist = useSelector(state => state?.lists)
+     const cards_exist = useSelector(state => state?.lists);
+     const checklist_exist = useSelector(state => state?.cards);
 
      //functions
 
@@ -87,18 +90,43 @@ const Card = (props) => {
     //useeffect
 }
 
+const createNewChecklist = (cardid) => {
+  function dispatch_create_checklist() {
+    dispatch(create_checklist_thunk(cardid))
+  }
+
+  return dispatch_create_checklist
+}
+
+const checklistdict_to_array = (cardid) => {
+  let array = Object.values(checklist_exist)
+  let checklists;
+  for (let i = 0; i < array.length ; i++) {
+    if (array[i]['cardid'] === cardid) {
+      checklists = array[i]['checklistdict']
+    }
+  }
+  if (checklists === undefined) {
+    return []
+  }
+  let checklistsarray = Object.values(checklists)
+  console.log(checklistsarray);
+
+  return checklistsarray
+}
+
 useEffect(
   () => {
-    // let card_list = Object.values(cards_exist);
-    // let array_of_cards = [];
-    // for (let i = 0; i < card_list.length; i++) {
-    //   const cardsarray = card_list[i]['order']
-    //   for (let j = 0; j < cardsarray.length; j++) {
-    //     if (parseInt(cardsarray[j]['id']) === parseInt(props.card.id)) {
-    //       const req = dispatch(get_checklists_for_card(cardsarray[j]['id']))
-    //     }
-    //   }
-    // }
+    let card_list = Object.values(cards_exist);
+    let array_of_cards = [];
+    for (let i = 0; i < card_list.length; i++) {
+      const cardsarray = card_list[i]['order']
+      for (let j = 0; j < cardsarray.length; j++) {
+        if (parseInt(cardsarray[j]['id']) === parseInt(props.card.id)) {
+          const req = dispatch(get_checklists_for_card(cardsarray[j]['id']))
+        }
+      }
+    }
 
   }
   , [dispatch]
@@ -165,8 +193,20 @@ useEffect(
                             onClick={changecardname(props.card.id.toString(), cardname)}
                             >Submit new name</button>
                             <div className="checklist_container">
+                              <h2>Checklists</h2>
+                              {checklist_exist && Object.values(checklist_exist).length > 0 &&
+                                checklistdict_to_array(props.card.id).map(checklist => (
+                                  <Checklist
+                                  key={checklist.id}
+                                  checklist={checklist}
+                                  />
+                                ))
+                              }
 
                             </div>
+                            <button
+                              className="cardbutton"
+                              onClick={createNewChecklist(props.card.id.toString())}>Create New Checklist</button>
                             <button
                               className="cardbutton"
                               onClick={deleteCard(props.card.id)}>Delete This Card</button>

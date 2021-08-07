@@ -1,5 +1,5 @@
 from flask import Blueprint, json, jsonify, request
-from app.models import User, db, Board, List, Card
+from app.models import User, db, Board, List, Card, Checklist
 from flask_login import login_required
 from sqlalchemy.sql import func
 # import requests
@@ -10,49 +10,58 @@ card_routes = Blueprint('card', __name__)
 @card_routes.route('/<int:cardid>')
 @login_required
 def getchecklists(cardid):
-    return {}
-    # # step 1
-    # cards = Card.query.filter_by(list_id = listid).all()
+    # step 1
+    checklists = Checklist.query.filter_by(card_id = cardid).all()
 
-    # #step 2
-    # cardsarray = [card.to_dict() for card in cards]
+    #step 2
+    checklistsarray = [checklist.to_dict() for checklist in checklists]
 
+    #step 3
+    checklistdict = {}
 
-    # for i in range(len(cardsarray)):
-    #     orderupdate = Card.query.get(cardsarray[i]['id'])
-    #     if (orderupdate.order == None):
-    #         orderupdate.order = i
-    #         db.session.commit()
-
-
-
-    # cards2 = Card.query.filter_by(list_id = listid).all()
-    # cardsarray2 = [card.to_dict() for card in cards2]
-
-    # #step 3
-    # cardsdict = {}
-    # cardorder = []
-
-    # x = 0
-    # for i in range(len(cardsarray2)):
-    #     for card in cardsarray2:
-    #         if card['order'] == x:
-    #             cardorder.append(card)
-    #             x = x + 1
+    for checklist in checklistsarray:
+        single = {}
+        single['id'] = checklist['id']
+        single['card_id'] = checklist['card_id']
+        single['name'] = checklist['name']
+        checklistdict[checklist['id']] = single
 
 
-    # for card in cardsarray2:
-    #     cardSingle = {}
-    #     cardSingle['id'] = card['id']
-    #     cardSingle['list_id'] = card['list_id']
-    #     cardSingle['name'] = card['name']
-    #     cardSingle['order'] = card['order']
+    return {
+        'cardid': cardid,
+        'checklistdict': checklistdict
+    }
 
-    #     cardsdict[card['id']] = cardSingle
+@card_routes.route('create-checklist/<int:cardid>', methods=['POST'])
+@login_required
+def createchecklist(cardid):
+    # step 1
+    checklist_to_create = Checklist(
+        name = "New Checklist",
+        card_id = cardid
+    )
+    # step 2
+    db.session.add(checklist_to_create)
+    #step 3
+    db.session.commit()
+
+    checklists = Checklist.query.filter_by(card_id = cardid).all()
+
+    #step 2
+    checklistsarray = [checklist.to_dict() for checklist in checklists]
+
+    #step 3
+    checklistdict = {}
+
+    for checklist in checklistsarray:
+        single = {}
+        single['id'] = checklist['id']
+        single['card_id'] = checklist['card_id']
+        single['name'] = checklist['name']
+        checklistdict[checklist['id']] = single
 
 
-    # return {
-    #     'listid': listid,
-    #     'dict': cardsdict,
-    #     'order': cardorder
-    # }
+    return {
+        'cardid': cardid,
+        'checklistdict': checklistdict
+    }
