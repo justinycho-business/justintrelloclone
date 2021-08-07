@@ -97,8 +97,15 @@ const Board = () => {
     // }
 
     const changeboardname = (boardid, board_name) => {
+        const regex = /^\s*$/
+        let name_to_pass;
+        if (boardname.match(regex)) {
+            name_to_pass = "Please Name Your Board"
+        } else {
+            name_to_pass = board_name
+        }
         function changeboardname2() {
-            const req = dispatch(change_board_name_thunk(boardid, board_name, user.id));
+            const req = dispatch(change_board_name_thunk(boardid, name_to_pass, user.id));
             if (!req) {
                 window.alert('Error!')
             }

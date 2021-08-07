@@ -92,9 +92,17 @@ const List = (props) => {
     // const [list_array, setlist_array] = useState([])
 
     const changelistname = (listid, list_name) => {
+        const regex = /^\s*$/
+        let name_to_pass;
+        if (listname.match(regex)) {
+            name_to_pass = "Please Name Your List"
+        } else {
+            name_to_pass = list_name
+        }
+
         function changelistname2() {
 
-            dispatch(change_list_name_thunk(listid, list_name, stringboardid));
+            dispatch(change_list_name_thunk(listid, name_to_pass, stringboardid));
             setlistname('');
             setIsOpen(false);
         }

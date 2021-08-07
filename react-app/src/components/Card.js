@@ -57,9 +57,17 @@ const Card = (props) => {
      //functions
 
      const changecardname = (cardid, card_name) => {
+      const regex = /^\s*$/
+      let name_to_pass;
+      if (cardname.match(regex)) {
+          name_to_pass = "Please Name Your Card"
+      } else {
+          name_to_pass = card_name
+      }
+
       function changecardname2() {
 
-          dispatch(change_card_name_thunk(cardid, card_name, (props.card.list_id).toString()));
+          dispatch(change_card_name_thunk(cardid, name_to_pass, (props.card.list_id).toString()));
           setcardname('');
           setIsOpen(false);
       }
