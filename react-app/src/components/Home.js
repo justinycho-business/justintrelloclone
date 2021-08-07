@@ -15,7 +15,8 @@ const Home = () => {
     //UseEffect. Grab stuff from back end
     useEffect(
         () => {
-        dispatch(getHomeBoardData(user?.id))
+        if(user !== null ){
+            dispatch(getHomeBoardData(user?.id))}
         }, [dispatch]
     )
 
@@ -36,6 +37,7 @@ const Home = () => {
       <div className='row-home'>
           <h1 className="HomeTitle">Justin's Trello Clone</h1>
           <h2>Use the login button on the nav bar and click "demo login"</h2>
+          <img src="https://i.ibb.co/P6P2c4d/cropped2.gif" alt="justin-trello-demo" />
           </div>
           }
 

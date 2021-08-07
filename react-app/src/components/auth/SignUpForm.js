@@ -10,11 +10,15 @@ const SignUpForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
+  const [errorpassword, seterrorpassword] = useState(false);
   const user = useSelector(state => state.session.user);
   const dispatch = useDispatch();
 
   const onSignUp = async (e) => {
     e.preventDefault();
+    if(password !== repeatPassword) {
+      seterrorpassword(true)
+    }
     if (password === repeatPassword) {
       const data = await dispatch(signUp(username, email, password));
       if (data) {
@@ -48,6 +52,11 @@ const SignUpForm = () => {
       <h1 className="SignUpFormTitle">Sign Up Form</h1>
     <form className="SignUpForm" onSubmit={onSignUp}>
       <div className="formdiv">
+        {errorpassword &&
+        <div
+        className="errormsg"
+        >Passwords did not match.</div>
+        }
         {errors.map((error, ind) => (
           <div
           className="errormsg"
