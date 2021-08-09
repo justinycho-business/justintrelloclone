@@ -141,6 +141,54 @@ def changecontentbullet(bulletid):
         'completion': completion
     }
 
+@checklist_routes.route('/change-completed-bullet/<int:bulletid>', methods=['PUT'])
+@login_required
+def changecompletedbullet(bulletid):
+    # step 1
+    request_data_body = request.get_json()
+    checklistid = request_data_body['checklistid']
+
+    bullet_to_change = Bullet.query.get(bulletid)
+    bullet_to_change.completed = not bullet_to_change.completed
+
+    #step 2
+    db.session.commit()
+
+    bullets = Bullet.query.filter_by(checklist_id = int(checklistid)).all()
+
+    #step 2
+    bulletsarray = [bullet.to_dict() for bullet in bullets]
+
+    #step 3
+    bulletdict = {}
+
+    for bullet in bulletsarray:
+        single = {}
+        single['id'] = bullet['id']
+        single['checklist_id'] = bullet['checklist_id']
+        single['name'] = bullet['name']
+        single['content'] = bullet['content']
+        single['completed'] = bullet['completed']
+        bulletdict[bullet['id']] = single
+
+
+    count = 0
+    for bullet in bulletsarray:
+        if bullet['completed'] == True:
+            count += 1
+
+    completion = 100
+    if (len(bulletsarray)) == 0:
+        completion = 0
+    else:
+        completion = round(count / (len(bulletsarray)), 2)
+
+    return {
+        'checklistid': checklistid,
+        'bulletdict': bulletdict,
+        'completion': completion
+    }
+
 
 @checklist_routes.route('create-bullet/<int:checklistid>', methods=['POST'])
 @login_required

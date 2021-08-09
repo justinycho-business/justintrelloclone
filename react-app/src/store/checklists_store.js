@@ -8,6 +8,9 @@ const CREATE_BULLETS = 'checklist/CREATE_BULLETS';
 const CHANGE_CONTENT = 'checklist/CHANGE_CONTENT';
 
 const DELETE_BULLET = 'checklist/DELETE_BULLET';
+
+const CHANGE_COMPLETED = 'checklist/CHANGE_COMPLETED';
+
 // Action Creators
 const getbulletdata = (bulletdata) => ({
     type:  GET_BULLETS,
@@ -26,6 +29,11 @@ const change_bullet_content = (bulletdata) => ({
 
 const delete_bullet  = (bulletdata) => ({
     type:  DELETE_BULLET,
+    payload: bulletdata
+})
+
+const change_bullet_completed =  (bulletdata) => ({
+    type:  CHANGE_COMPLETED,
     payload: bulletdata
 })
 
@@ -81,6 +89,25 @@ export const change_bullet_content_thunk = (bulletid, bulletcontent, checklistid
     }
 }
 
+export const completed_bullet_thunk  = (bulletid, checklistid) => async (dispatch) => {
+    const response = await fetch(`/api/checklist/change-completed-bullet/${bulletid}`, {
+        method: ['PUT'],
+        headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+           },
+           body: JSON.stringify({
+            'bulletid': bulletid,
+            'checklistid': checklistid
+                                   })
+    })
+
+    if(response.ok) {
+        const bullet_data = await response.json();
+        dispatch(change_bullet_completed(bullet_data));
+    }
+}
+
 export const delete_bullet_thunk = (bulletid, checklistid) => async (dispatch) => {
     const response = await fetch(`/api/checklist/delete-bullet/${bulletid}`, {
         method: ['DELETE'],
@@ -122,6 +149,10 @@ export default function checklistReducer(state = initialState, action) {
             let deleteBullet = {...state}
             deleteBullet[action.payload['checklistid']] = action.payload
             return deleteBullet
+        case CHANGE_COMPLETED:
+            let changeCompleted = {...state}
+            changeCompleted[action.payload['checklistid']] = action.payload
+            return changeCompleted
 
         default:
             return state;

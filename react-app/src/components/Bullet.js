@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import {change_bullet_content_thunk, delete_bullet_thunk} from '../store/checklists_store';
+import {change_bullet_content_thunk, delete_bullet_thunk, completed_bullet_thunk} from '../store/checklists_store';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
@@ -14,6 +14,7 @@ const Bullet = (props) => {
     const [bulletcontent, setbulletcontent] = useState(props.bullet.content)
     const [bulletcontentedit, setbulletcontentedit] = useState(false)
     const checklist_info = useSelector(state => state?.checklists)
+    const [checked, setchecked] = useState(checklist_info[props.bullet.checklist_id]['bulletdict'][props.bullet.id]['completed'])
 
 
 
@@ -48,12 +49,20 @@ const Bullet = (props) => {
 
     }
 
+    const changecheckbox = () => {
+        dispatch(completed_bullet_thunk(props.bullet.id, props.bullet.checklist_id))
+        setchecked(!checked)
+        return
+    }
+
 
 
     return (
         <div className="bullet-whole">
         <div className='bullet-content'>
-            <img className="img-check" src="https://i.ibb.co/Lzr8g11/empty-checkbox.png" height='25px'/>
+            {!checked && <img className="img-check" onClick={changecheckbox} src="https://i.ibb.co/Lzr8g11/empty-checkbox.png" height='25px'/>}
+            {checked && <img className="img-check" onClick={changecheckbox} src="https://i.ibb.co/Rz4hFhD/icons8-checked-checkbox-96.png" height='25px'/>}
+
 
             {!bulletcontentedit &&<span className='bullet-content'> {props.bullet.content}</span>}
             {bulletcontentedit && <div>

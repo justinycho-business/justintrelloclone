@@ -27,6 +27,7 @@ const customStyles = {
       border: '5px solid wheat',
       borderRadius: "10px",
       backgroundColor: "rgb(255, 241, 205)",
+      maxHeight: '90%',
 
     },
   };

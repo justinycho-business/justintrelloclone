@@ -16,8 +16,7 @@ const Checklist = (props) => {
     const [editname, seteditname] = useState(false)
     const [checklistname, setchecklistname] = useState('')
     const [checklist_bullet_array, setchecklist_bullet_array] = useState([])
-    const [count, setcount] = useState(0)
-    const [progressbarvalue, setprogressbarvalue] = useState(0)
+
 
     const checklists_redux = useSelector(state => state?.checklists);
     const cards_redux = useSelector(state => state?.cards);
@@ -142,13 +141,15 @@ const Checklist = (props) => {
                     > Delete </button>
                     </div>
             </div>
-
-            {checklists_redux  && checklists_redux[props.checklist.id] && checklists_redux[props.checklist.id]['completion'] &&
             <div>
-            <label id={`label-progressbar-${props.checklist.id}`} htmlFor={`progressbar-${props.checklist.id}`}>Completion:{(checklists_redux[props.checklist.id]['completion'])*100}%</label>
-            <progress id={`progressbar-${props.checklist.id}`} value={(checklists_redux[props.checklist.id]['completion'])*100} max="100"></progress>
+            {checklists_redux  && checklists_redux[props.checklist.id] &&
+            // checklists_redux[props.checklist.id]['completion'] &&
+            <div>
+            <label id={`label-progressbar-${props.checklist.id}`} htmlFor={`progressbar-${props.checklist.id}`}>Completion:{Math.ceil((checklists_redux[props.checklist.id]['completion'])*100)}%</label>
+            <progress id={`progressbar-${props.checklist.id}`} value={Math.ceil((checklists_redux[props.checklist.id]['completion'])*100)} max="100"></progress>
             </div>
             }
+            </div>
 
 
             <div className="bullet-container">
