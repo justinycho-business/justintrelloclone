@@ -19,6 +19,7 @@ def getbullets(checklistid):
     #step 3
     bulletdict = {}
 
+
     for bullet in bulletsarray:
         single = {}
         single['id'] = bullet['id']
@@ -28,10 +29,21 @@ def getbullets(checklistid):
         single['completed'] = bullet['completed']
         bulletdict[bullet['id']] = single
 
+    count = 0
+    for bullet in bulletsarray:
+        if bullet['completed'] == True:
+            count += 1
+
+    completion = 100
+    if (len(bulletsarray)) == 0:
+        completion = 0
+    else:
+        completion = round(count / (len(bulletsarray)), 2)
 
     return {
         'checklistid': checklistid,
-        'bulletdict': bulletdict
+        'bulletdict': bulletdict,
+        'completion': completion
     }
 
 @checklist_routes.route('/delete-bullet/<int:bulletid>', methods=['DELETE'])
@@ -63,10 +75,21 @@ def deletebullet(bulletid):
         single['completed'] = bullet['completed']
         bulletdict[bullet['id']] = single
 
+    count = 0
+    for bullet in bulletsarray:
+        if bullet['completed'] == True:
+            count += 1
+
+    completion = 100
+    if (len(bulletsarray)) == 0:
+        completion = 0
+    else:
+        completion = round(count / (len(bulletsarray)), 2)
 
     return {
         'checklistid': checklistid,
-        'bulletdict': bulletdict
+        'bulletdict': bulletdict,
+        'completion': completion
     }
 
 @checklist_routes.route('/change-content-bullet/<int:bulletid>', methods=['PUT'])
@@ -101,9 +124,21 @@ def changecontentbullet(bulletid):
         bulletdict[bullet['id']] = single
 
 
+    count = 0
+    for bullet in bulletsarray:
+        if bullet['completed'] == True:
+            count += 1
+
+    completion = 100
+    if (len(bulletsarray)) == 0:
+        completion = 0
+    else:
+        completion = round(count / (len(bulletsarray)), 2)
+
     return {
         'checklistid': checklistid,
-        'bulletdict': bulletdict
+        'bulletdict': bulletdict,
+        'completion': completion
     }
 
 
@@ -140,7 +175,19 @@ def createbullet(checklistid):
         bulletdict[bullet['id']] = single
 
 
+    count = 0
+    for bullet in bulletsarray:
+        if bullet['completed'] == True:
+            count += 1
+
+    completion = 100
+    if (len(bulletsarray)) == 0:
+        completion = 0
+    else:
+        completion = round(count / (len(bulletsarray)), 2)
+
     return {
         'checklistid': checklistid,
-        'bulletdict': bulletdict
+        'bulletdict': bulletdict,
+        'completion': completion
     }

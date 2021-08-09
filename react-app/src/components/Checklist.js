@@ -15,10 +15,19 @@ const Checklist = (props) => {
     const dispatch = useDispatch();
     const [editname, seteditname] = useState(false)
     const [checklistname, setchecklistname] = useState('')
+    const [checklist_bullet_array, setchecklist_bullet_array] = useState([])
+    const [count, setcount] = useState(0)
+    const [progressbarvalue, setprogressbarvalue] = useState(0)
 
     const checklists_redux = useSelector(state => state?.checklists);
     const cards_redux = useSelector(state => state?.cards);
 
+    // if(Object.values(checklists_redux) > 0) {
+    //     let checklist_array = Object.values(checklists_redux)
+    //     if (checklist_array[props.checklist.id]) {
+    //         console.log(checklist_array[props.checklist.id]);
+    //     }
+    // }
     const get_bullets_array = (dict) => {
         let array = Object.values(dict)
         for(let i = 0; i < array.length; i++) {
@@ -68,19 +77,29 @@ const Checklist = (props) => {
     useEffect(
         () => {
             let cards = Object.values(cards_redux)
+            let diction;
             for (let i = 0; i < cards.length; i++) {
                 if (cards[i]['cardid'] === props.checklist.card_id) {
                     let checklists = Object.values(cards[i]['checklistdict'])
                     for (let j = 0; j < checklists.length; j++)
                         if (checklists[j]['id'] === props.checklist.id) {
                             const req = dispatch(get_bullets_for_checklist(checklists[j]['id']))
+                            req.then(function(result) {
+                                diction = result
+                            })
+
+
                         }
                 }
             }
 
+
+
         }
+
         , [dispatch]
       )
+
 
     const createNewBullet = (checklistid) => {
     function dispatch_create_bullet() {
@@ -124,8 +143,15 @@ const Checklist = (props) => {
                     </div>
             </div>
 
-            <div className="bullet-container">
+            {checklists_redux  && checklists_redux[props.checklist.id] && checklists_redux[props.checklist.id]['completion'] &&
+            <div>
+            <label id={`label-progressbar-${props.checklist.id}`} htmlFor={`progressbar-${props.checklist.id}`}>Completion:{(checklists_redux[props.checklist.id]['completion'])*100}%</label>
+            <progress id={`progressbar-${props.checklist.id}`} value={(checklists_redux[props.checklist.id]['completion'])*100} max="100"></progress>
+            </div>
+            }
 
+
+            <div className="bullet-container">
                 {checklists_redux && Object.values(checklists_redux).length > 0 &&
                                 get_bullets_array(checklists_redux).map(bullet => (
                                   <Bullet

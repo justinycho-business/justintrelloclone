@@ -36,6 +36,10 @@ export const get_bullets_for_checklist = (checklistid) => async (dispatch) => {
     if(response.ok) {
         const bullet_data = await response.json();
         dispatch(getbulletdata(bullet_data));
+        const second_bullet_data = await bullet_data
+        let hi = bullet_data.bulletdict
+        let hi5 = Object.values(hi)
+        return hi
     }
 }
 

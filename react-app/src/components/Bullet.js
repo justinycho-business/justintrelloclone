@@ -15,6 +15,8 @@ const Bullet = (props) => {
     const [bulletcontentedit, setbulletcontentedit] = useState(false)
     const checklist_info = useSelector(state => state?.checklists)
 
+
+
     const change_bullet_content = (bulletid, bullet_content) => {
         const regex = /^\s*$/
         let content_to_pass;
