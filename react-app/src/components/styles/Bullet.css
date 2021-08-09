@@ -1,0 +1,33 @@
+.bullet-content{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-y: auto;
+    overflow-wrap: normal;
+    overflow-x: auto;
+
+}
+
+.img-check{
+
+}
+
+.bullet-button{
+    background-color: rgb(20, 238, 216);
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+    color: black;
+}
+
+.bullet-whole{
+    margin-left: 30px;
+    margin-right: 60px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 90%;
+    min-width: 60%;
+}

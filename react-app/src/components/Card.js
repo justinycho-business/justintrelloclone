@@ -5,10 +5,12 @@ import { get_card_data,
     create_card_thunk,
     change_card_name_thunk,
     delete_card_thunk} from '../store/lists_store';
-    import {get_checklists_for_card} from "../store/cards_store"
+    import {get_checklists_for_card,
+      create_checklist_thunk} from "../store/cards_store"
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
+import Checklist from './Checklist';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import './styles/Card.css'
 
@@ -20,7 +22,13 @@ const customStyles = {
       right: 'auto',
       bottom: 'auto',
       marginRight: '-50%',
+      width: '50%',
       transform: 'translate(-50%, -50%)',
+      border: '5px solid wheat',
+      borderRadius: "10px",
+      backgroundColor: "rgb(255, 241, 205)",
+      maxHeight: '90%',
+
     },
   };
 
@@ -39,7 +47,7 @@ const Card = (props) => {
 
      function afterOpenModal() {
        // references are now sync'd and can be accessed.
-       subtitle.style.color = 'blue';
+      //  subtitle.style.color = 'blue';
      }
 
      function closeModal() {
@@ -51,8 +59,10 @@ const Card = (props) => {
      //useState
      const [cardname, setcardname] = useState('')
      const [dragBlocking, setdragblocking] = useState(false);
+     const [cardnameedit, setcardnameedit] = useState(false);
 
-     const cards_exist = useSelector(state => state?.lists)
+     const cards_exist = useSelector(state => state?.lists);
+     const checklist_exist = useSelector(state => state?.cards);
 
      //functions
 
@@ -69,7 +79,7 @@ const Card = (props) => {
 
           dispatch(change_card_name_thunk(cardid, name_to_pass, (props.card.list_id).toString()));
           setcardname('');
-          setIsOpen(false);
+          setcardnameedit(false);
       }
       return changecardname2
   }
@@ -87,18 +97,49 @@ const Card = (props) => {
     //useeffect
 }
 
+const createNewChecklist = (cardid) => {
+  function dispatch_create_checklist() {
+    dispatch(create_checklist_thunk(cardid))
+  }
+
+  return dispatch_create_checklist
+}
+
+const checklistdict_to_array = (cardid) => {
+  let array = Object.values(checklist_exist)
+  let checklists;
+  for (let i = 0; i < array.length ; i++) {
+    if (array[i]['cardid'] === cardid) {
+      checklists = array[i]['checklistdict']
+    }
+  }
+  if (checklists === undefined) {
+    return []
+  }
+  let checklistsarray = Object.values(checklists)
+  // console.log(checklistsarray);
+
+  return checklistsarray
+}
+
+const editcardname_ = () => {
+  console.log(cardnameedit);
+  setcardnameedit(true)
+  return
+}
+
 useEffect(
   () => {
-    // let card_list = Object.values(cards_exist);
-    // let array_of_cards = [];
-    // for (let i = 0; i < card_list.length; i++) {
-    //   const cardsarray = card_list[i]['order']
-    //   for (let j = 0; j < cardsarray.length; j++) {
-    //     if (parseInt(cardsarray[j]['id']) === parseInt(props.card.id)) {
-    //       const req = dispatch(get_checklists_for_card(cardsarray[j]['id']))
-    //     }
-    //   }
-    // }
+    let card_list = Object.values(cards_exist);
+    let array_of_cards = [];
+    for (let i = 0; i < card_list.length; i++) {
+      const cardsarray = card_list[i]['order']
+      for (let j = 0; j < cardsarray.length; j++) {
+        if (parseInt(cardsarray[j]['id']) === parseInt(props.card.id)) {
+          const req = dispatch(get_checklists_for_card(cardsarray[j]['id']))
+        }
+      }
+    }
 
   }
   , [dispatch]
@@ -117,7 +158,7 @@ useEffect(
     {...provided.dragHandleProps}
     ref = {provided.innerRef}
     className='card'>
-        <div>{props.card.name}</div>
+        <div className="card-outside-title">{props.card.name}</div>
         <button
             className="cardbutton"
             onClick={
@@ -132,9 +173,13 @@ useEffect(
                             style={customStyles}
                             contentLabel={props.card.name}
                         >
-                            <h2 ref={(_subtitle) => (subtitle = _subtitle)}>{props.card.name}</h2>
-                            <div>Edit Card </div>
-                            <form>
+                        <div className="cardnameedit">
+                            {!cardnameedit && <h2 className="card-title"
+                            // ref={(_subtitle) => (subtitle = _subtitle)}
+                            >{props.card.name}</h2>}
+                            {cardnameedit && <div>
+                                <div className="newcardname">
+                              <form>
                             {/* <input
                             type='hidden'
                             value={parseInt(list.id)}
@@ -147,32 +192,48 @@ useEffect(
                             value={cardname}
                             onChange={(e) => setcardname(e.target.value)}
                             />
-                            {/* <button
-                            className="cardbutton"
-                            onClick={changecardname(props.card.id.toString(), cardname)}
-                            >Submit new name</button> */}
-                            {/* <button onClick={changelistname(list.id.toString(), listname)}>Submit new name</button> */}
-                            {/* <button>stays</button>
-                            <button>inside</button>
-                            <button>the modal</button> */}
+
                             </form>
-                            {/* <button
-                            className="cardbutton"
-                            onClick={changecardname(props.card.id.toString(), cardname)}
-                            >Submit new name</button> */}
+
                             <button
                             className="cardbutton"
                             onClick={changecardname(props.card.id.toString(), cardname)}
                             >Submit new name</button>
+                            </div>
+                            </div>
+
+                            }
+
+
+                            <button
+                            className="cardbutton"
+                            onClick={editcardname_}
+                            >Edit Card Name</button>
+                        </div>
+
                             <div className="checklist_container">
+                              <h2 className="h2-checklist">Checklists</h2>
+                              {checklist_exist && Object.values(checklist_exist).length > 0 &&
+                                checklistdict_to_array(props.card.id).map(checklist => (
+                                  <Checklist
+                                  key={checklist.id}
+                                  checklist={checklist}
+                                  />
+                                ))
+                              }
 
                             </div>
+                            <button
+                              className="checklistbutton"
+                              onClick={createNewChecklist(props.card.id.toString())}>Create New Checklist</button>
+                            <div className="cardbutton-div">
                             <button
                               className="cardbutton"
                               onClick={deleteCard(props.card.id)}>Delete This Card</button>
                             <button
                             className="cardbutton"
                             onClick={closeModal}>close</button>
+                            </div>
                         </Modal>
 
 

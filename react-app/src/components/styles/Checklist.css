@@ -1,0 +1,41 @@
+.whole-checklist{
+    margin-left: 15px;
+}
+
+.checklist-title {
+    font-size: 25px;
+    font-family: monospace;
+    color: green;
+    text-decoration: underline ;
+    font-weight: bold;
+}
+
+.checklistbutton{
+    padding: 1px 10px;
+    margin: 5px;
+    border-radius: 8px;
+    background-color: green;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: monospace;
+    align-content: center;
+}
+
+
+.checklist-items-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.bullet-button{
+    background-color: rgb(20, 238, 216);
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+    color: black;
+}

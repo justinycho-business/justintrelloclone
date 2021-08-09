@@ -24,8 +24,8 @@ html {
   left: 0px;
   width: 100%;
   /* transform: translateX(-50%); */
-  display: flex
-;
+  display: flex;
+  padding-bottom: 20px;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;

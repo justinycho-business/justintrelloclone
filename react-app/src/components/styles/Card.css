@@ -7,8 +7,62 @@
 
 .cardbutton {
     margin: 10px;
-    padding: 10px;
+    padding: 5px;
     font-size: 15px;
     background-color: yellow;
     border-radius: 10px;
+}
+
+.cardbutton-div {
+    display: flex;
+    justify-content: flex-end;
+}
+.checklistbutton{
+    padding: 1px 10px;
+    margin: 5px;
+    border-radius: 8px;
+    background-color: green;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: monospace;
+    align-content: center;
+}
+.cardnameedit {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.card-title{
+    color: blue;
+    font-size: 40px;
+    font-family: serif;
+    text-decoration: underline;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    padding: 15px
+
+}
+.newcardname{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.h2-checklist{
+    font-size: 30px;
+    font-family: serif;
+    text-decoration: underline;
+    margin-bottom: 10px;
+}
+
+.card-outside-title{
+    color: rgb(41, 77, 205);
+    font-family: sans-serif;
+    font-size: 16px;
+    font-weight: 700;
 }

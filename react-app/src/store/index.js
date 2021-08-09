@@ -4,12 +4,14 @@ import session from './session'
 import boardReducer from './boards';
 import listReducer from './lists_store';
 import cardReducer from './cards_store';
+import checklistReducer from './checklists_store';
 
 const rootReducer = combineReducers({
   session,
   boards: boardReducer,
   lists: listReducer,
-  cards: cardReducer
+  cards: cardReducer,
+  checklists: checklistReducer
 });
 
 
