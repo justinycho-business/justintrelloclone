@@ -1,9 +1,13 @@
 import { bodyOpenClassName } from "react-modal/lib/components/Modal";
 
 // Define action types
-const GET_BULLETS = 'cards/GET_BULLETS';
+const GET_BULLETS = 'checklist/GET_BULLETS';
 
-const CREATE_BULLETS = 'cards/CREATE_BULLETS';
+const CREATE_BULLETS = 'checklist/CREATE_BULLETS';
+
+const CHANGE_CONTENT = 'checklist/CHANGE_CONTENT';
+
+const DELETE_BULLET = 'checklist/DELETE_BULLET';
 // Action Creators
 const getbulletdata = (bulletdata) => ({
     type:  GET_BULLETS,
@@ -12,6 +16,16 @@ const getbulletdata = (bulletdata) => ({
 
 const createbulletdata = (bulletdata) => ({
     type:  CREATE_BULLETS,
+    payload: bulletdata
+})
+
+const change_bullet_content = (bulletdata) => ({
+    type:  CHANGE_CONTENT,
+    payload: bulletdata
+})
+
+const delete_bullet  = (bulletdata) => ({
+    type:  DELETE_BULLET,
     payload: bulletdata
 })
 
@@ -42,6 +56,46 @@ export const create_bullet_thunk = (checklistid) => async (dispatch) => {
         dispatch(createbulletdata(bullet_data));
     }
 }
+
+export const change_bullet_content_thunk = (bulletid, bulletcontent, checklistid) => async (dispatch) => {
+    const response = await fetch(`/api/checklist/change-content-bullet/${bulletid}`, {
+        method: ['PUT'],
+        headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+           },
+           body: JSON.stringify({
+            'bulletid': bulletid,
+            'bulletcontent': bulletcontent,
+            'checklistid': checklistid
+                                   })
+    })
+
+    if(response.ok) {
+        const bullet_data = await response.json();
+        dispatch(change_bullet_content(bullet_data));
+    }
+}
+
+export const delete_bullet_thunk = (bulletid, checklistid) => async (dispatch) => {
+    const response = await fetch(`/api/checklist/delete-bullet/${bulletid}`, {
+        method: ['DELETE'],
+        headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+           },
+           body: JSON.stringify({
+            'checklistid': checklistid
+                                   })
+
+    })
+
+    if(response.ok) {
+        const bullet_data = await response.json();
+        dispatch(delete_bullet(bullet_data));
+
+    }
+}
 // Define initial state
 const initialState = {}
 
@@ -56,6 +110,15 @@ export default function checklistReducer(state = initialState, action) {
             let createBulletState = {...state}
             createBulletState[action.payload['checklistid']] = action.payload
             return createBulletState
+        case CHANGE_CONTENT:
+            let changeBulletContent = {...state}
+            changeBulletContent[action.payload['checklistid']] = action.payload
+            return changeBulletContent
+        case DELETE_BULLET:
+            let deleteBullet = {...state}
+            deleteBullet[action.payload['checklistid']] = action.payload
+            return deleteBullet
+
         default:
             return state;
     };

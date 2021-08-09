@@ -137,7 +137,9 @@ const Checklist = (props) => {
 
 
             </div>
-            <button onClick={createNewBullet(props.checklist.id)}>Create New Bullet</button>
+            <button
+            className="bullet-button"
+            onClick={createNewBullet(props.checklist.id)}>Create New Bullet</button>
 
         </div>
     )

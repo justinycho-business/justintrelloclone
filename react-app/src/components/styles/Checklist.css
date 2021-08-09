@@ -31,3 +31,11 @@
     margin-bottom: 15px;
     margin-top: 10px;
 }
+
+.bullet-button{
+    background-color: rgb(20, 238, 216);
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+    color: black;
+}

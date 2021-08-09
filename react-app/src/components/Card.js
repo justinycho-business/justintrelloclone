@@ -223,14 +223,16 @@ useEffect(
 
                             </div>
                             <button
-                              className="cardbutton"
+                              className="checklistbutton"
                               onClick={createNewChecklist(props.card.id.toString())}>Create New Checklist</button>
+                            <div className="cardbutton-div">
                             <button
                               className="cardbutton"
                               onClick={deleteCard(props.card.id)}>Delete This Card</button>
                             <button
                             className="cardbutton"
                             onClick={closeModal}>close</button>
+                            </div>
                         </Modal>
 
 

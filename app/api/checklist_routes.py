@@ -34,6 +34,79 @@ def getbullets(checklistid):
         'bulletdict': bulletdict
     }
 
+@checklist_routes.route('/delete-bullet/<int:bulletid>', methods=['DELETE'])
+@login_required
+def deletebullet(bulletid):
+    # step 1
+    request_data_body = request.get_json()
+    checklistid = request_data_body['checklistid']
+    bullet_to_dlt = Bullet.query.filter_by(id = bulletid).first()
+    # step 2
+    db.session.delete(bullet_to_dlt)
+    #step 3
+    db.session.commit()
+    # return {'message': f'List with ID of {listid} has been deleted'}
+    bullets = Bullet.query.filter_by(checklist_id = int(checklistid)).all()
+
+    #step 2
+    bulletsarray = [bullet.to_dict() for bullet in bullets]
+
+    #step 3
+    bulletdict = {}
+
+    for bullet in bulletsarray:
+        single = {}
+        single['id'] = bullet['id']
+        single['checklist_id'] = bullet['checklist_id']
+        single['name'] = bullet['name']
+        single['content'] = bullet['content']
+        single['completed'] = bullet['completed']
+        bulletdict[bullet['id']] = single
+
+
+    return {
+        'checklistid': checklistid,
+        'bulletdict': bulletdict
+    }
+
+@checklist_routes.route('/change-content-bullet/<int:bulletid>', methods=['PUT'])
+@login_required
+def changecontentbullet(bulletid):
+    # step 1
+    request_data_body = request.get_json()
+    bulletcontent = request_data_body['bulletcontent']
+    checklistid = request_data_body['checklistid']
+
+    bullet_to_change = Bullet.query.get(bulletid)
+    bullet_to_change.content = bulletcontent
+
+    #step 2
+    db.session.commit()
+
+    bullets = Bullet.query.filter_by(checklist_id = int(checklistid)).all()
+
+    #step 2
+    bulletsarray = [bullet.to_dict() for bullet in bullets]
+
+    #step 3
+    bulletdict = {}
+
+    for bullet in bulletsarray:
+        single = {}
+        single['id'] = bullet['id']
+        single['checklist_id'] = bullet['checklist_id']
+        single['name'] = bullet['name']
+        single['content'] = bullet['content']
+        single['completed'] = bullet['completed']
+        bulletdict[bullet['id']] = single
+
+
+    return {
+        'checklistid': checklistid,
+        'bulletdict': bulletdict
+    }
+
+
 @checklist_routes.route('create-bullet/<int:checklistid>', methods=['POST'])
 @login_required
 def createbullet(checklistid):

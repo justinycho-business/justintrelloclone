@@ -3,6 +3,10 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
+    overflow-y: auto;
+    overflow-wrap: normal;
+    overflow-x: auto;
+
 }
 
 .img-check{
@@ -24,4 +28,6 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    max-width: 90%;
+    min-width: 60%;
 }
