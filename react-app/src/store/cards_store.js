@@ -5,7 +5,9 @@ const GET_CHECKLISTS = 'cards/GET_CHECKLISTS';
 
 const CREATE_CHECKLISTS = 'cards/CREATE_CHECKLISTS';
 
-const RENAME_CHECKLIST = 'cards/RENAME_CHECKLIST'
+const RENAME_CHECKLIST = 'cards/RENAME_CHECKLIST';
+
+const DELETE_CHECKLIST = 'cards/DELETE_CHECKLIST';
 
 // Action Creators
 const getchecklistdata = (checklistdata) => ({
@@ -20,6 +22,11 @@ const create_checklist = (checklistdata) => ({
 
 const change_checklist_name = (checklistdata) => ({
     type:  RENAME_CHECKLIST,
+    payload: checklistdata
+})
+
+const delete_checklist = (checklistdata) => ({
+    type:  DELETE_CHECKLIST,
     payload: checklistdata
 })
 
@@ -73,6 +80,26 @@ export const change_checklist_name_thunk = (checklistid, checklistname, cardid) 
     }
 }
 
+export const delete_checklist_thunk = (checklistid, cardid) => async (dispatch) => {
+    const response = await fetch(`/api/card/delete-checklist/${checklistid}`, {
+        method: ['DELETE'],
+        headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+           },
+           body: JSON.stringify({
+            'cardid': cardid
+                                   })
+
+    })
+
+    if(response.ok) {
+        const card_data = await response.json();
+        dispatch(delete_checklist(card_data));
+
+    }
+}
+
 // Define initial state
 const initialState = {}
 
@@ -91,6 +118,10 @@ export default function cardReducer(state = initialState, action) {
             let renameChecklistState = {...state}
             renameChecklistState[action.payload['cardid']] = action.payload
             return renameChecklistState
+        case DELETE_CHECKLIST:
+            let deleteChecklistState = {...state}
+            deleteChecklistState[action.payload['cardid']] = action.payload
+            return deleteChecklistState
         default:
             return state;
     };

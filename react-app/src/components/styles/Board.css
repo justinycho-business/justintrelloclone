@@ -1,7 +1,7 @@
 .boardcontainer {
     display: flex;
     flex-direction: column;
-    margin-top: 75px;
+    margin-top: 100px;
     padding-top: 2vw;
     align-items: center;
     justify-content: flex-start;
@@ -16,16 +16,22 @@
     right: 0;
     bottom: 0;
     left: 0;
+    background-color: rgb(38, 193, 231);
 }
 
 .boardname{
-    color: blue;
+    color: white;
     padding-bottom: 5px;
     font-size: 28px;
+    background-color: tomato;
+    padding: 10px;
+    border-radius: 10px;
+
 }
 .border-1 {
     border: 2px solid blue;
     border-radius: 10px;
+    background-color: yellow;
 }
 
 .border-2 {

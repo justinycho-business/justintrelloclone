@@ -1,22 +1,27 @@
 .list_in_board{
     display: flex;
     flex-direction: column;
-    margin-left: 5px;
-    margin-right: 5px;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-bottom: 10px;
     padding: 10px;
     align-items: center;
     justify-content: center;
     font-size: 18px;
     font-family: Georgia, 'Times New Roman', Times, serif;
-    color: red;
+    color: white;
+    background-color: tomato;
+    border-radius: 10px;
+
 
 }
 
 .border-2{
     border: 2px solid red;
     padding: 5px;
-    margin:5px;
+    margin: 9px;
     background-color: white;
+    box-shadow: 3px 3px 3px 3px rgb(22, 22, 22, 0.3);
 }
 
 .listbutton{
@@ -32,7 +37,7 @@
 }
 
 .card-container {
-    background-color: rgb(43, 243, 43);
+    background-color: rgb(83, 252, 83);
     margin: 5px;
     padding: 20px;
     border-radius: 5px;

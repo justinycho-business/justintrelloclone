@@ -31,6 +31,39 @@ def getchecklists(cardid):
         'cardid': cardid,
         'checklistdict': checklistdict
     }
+
+@card_routes.route('/delete-checklist/<int:checklistid>', methods=['DELETE'])
+@login_required
+def deletechecklist(checklistid):
+    # step 1
+    request_data_body = request.get_json()
+    card_id = request_data_body['cardid']
+    checklist_to_dlt = Checklist.query.filter_by(id = checklistid).first()
+    # step 2
+    db.session.delete(checklist_to_dlt)
+    #step 3
+    db.session.commit()
+    # return {'message': f'List with ID of {listid} has been deleted'}
+    checklists = Checklist.query.filter_by(card_id = int(card_id)).all()
+
+    checklistsarray = [checklist.to_dict() for checklist in checklists]
+
+    checklistdict = {}
+
+    for checklist in checklistsarray:
+        checklistSingle = {}
+        checklistSingle['id'] = checklist['id']
+        checklistSingle['card_id'] = checklist['card_id']
+        checklistSingle['name'] = checklist['name']
+
+        checklistdict[checklist['id']] = checklistSingle
+
+
+    return {
+        'cardid': int(card_id),
+        'checklistdict': checklistdict
+    }
+
 @card_routes.route('/change-name-checklist/<int:checklistid>', methods=['PUT'])
 @login_required
 def changenamechecklist(checklistid):
