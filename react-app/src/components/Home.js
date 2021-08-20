@@ -37,7 +37,7 @@ const Home = () => {
       <div className='row-home'>
           <h1 className="HomeTitle">Justin's Trello Clone</h1>
           <h2>Use the login button on the nav bar and click "demo login"</h2>
-          <img src="https://i.ibb.co/vcz2hn5/justin-trello-gif.gif" alt="justin-trello-demo" />
+          <img className="justingif" src="https://i.ibb.co/vcz2hn5/justin-trello-gif.gif" alt="justin-trello-demo" />
           </div>
           }
 

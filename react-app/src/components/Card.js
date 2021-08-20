@@ -117,13 +117,13 @@ const checklistdict_to_array = (cardid) => {
     return []
   }
   let checklistsarray = Object.values(checklists)
-  // console.log(checklistsarray);
+
 
   return checklistsarray
 }
 
 const editcardname_ = () => {
-  console.log(cardnameedit);
+
   setcardnameedit(true)
   return
 }

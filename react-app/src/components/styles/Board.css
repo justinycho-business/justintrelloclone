@@ -1,22 +1,46 @@
+
+
 .boardcontainer {
     display: flex;
     flex-direction: column;
     margin-top: 100px;
-    padding-top: 2vw;
+    margin-bottom: 100px;
+    padding-top: 100px;
+    padding-bottom: 50px;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     user-select: none;
     white-space: nowrap;
-    margin-bottom: 8px;
     overflow-x: auto;
     overflow-y: auto;
-    padding-bottom: 8px;
     position: absolute;
     top: 0;
-    right: 0;
     bottom: 0;
+    right: 0;
     left: 0;
-    background-color: rgb(38, 193, 231);
+    /* background-color: rgb(38, 193, 231); */
+    background-color: #90d4ed;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: rgb(204, 186, 186);
+    border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: black;
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .boardname{
@@ -26,12 +50,18 @@
     background-color: tomato;
     padding: 10px;
     border-radius: 10px;
+    margin-top: 150px;
 
 }
 .border-1 {
     border: 2px solid blue;
     border-radius: 10px;
     background-color: yellow;
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    left: 0px;
+
 }
 
 .border-2 {
@@ -62,6 +92,8 @@
     font-size: 15px;
     background-color: lightpink;
     border-radius: 10px;
+    margin-bottom: 15px;
+    bottom: 100px;
 }
 
 .boardeditinput{

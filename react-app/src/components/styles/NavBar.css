@@ -25,14 +25,14 @@ html {
   width: 100%;
   /* transform: translateX(-50%); */
   display: flex;
-  padding-bottom: 20px;
+  /* padding-bottom: 20px; */
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   border: 2px solid #EBECF1;
   /* border-radius: 30px; */
   /* padding: 20px; */
-  background-color: yellow;
+  background-color: wheat;
   height: 100px;
   /* animation: slide-in 1s ease-out; */
 }
@@ -50,7 +50,8 @@ html {
   font-size: 30px;
   text-decoration: none;
   padding: 10px;
-  background-color: rgb(38, 193, 231);
+  background-color: #90d4ed;
+text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
   border-radius: 20px;
   color: white;
 }
@@ -91,13 +92,18 @@ html {
 }
 
 .dropdown-content {
-  top: 10vw;
-  display: none;
-  background-color: #f9f9f9;
+  top: 80px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: salmon;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   padding: 12px 16px;
   z-index: 1;
+  position: absolute;
+  border-radius: 15px;
 }
 
 .dropdown:hover .dropdown-content {

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import LogoutButton from './auth/LogoutButton';
 import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
@@ -19,6 +19,7 @@ const NavBar = () => {
   const history = useHistory()
 
   const[newboardid, setnewboardid] = useState('hi')
+  const [showdropdown, setshowdropdown] = useState(false)
 
   // function redirect() {
 
@@ -29,17 +30,21 @@ const NavBar = () => {
   //   }
 
   // }
+  function myboard() {
+    history.push('/')
+  }
 
+  function dropdown() {
+    if (showdropdown) {
+      setshowdropdown(false)
+    } else {
+      setshowdropdown(true)
+    }
+    return
+  }
   function createBoard() {
 
       dispatch(create_board_thunk(user.id, history))
-
-      // setnewboardid(board0?.board?.board_details?.id)
-
-      // history.push(`/board/${newboardid}`)
-
-
-
 
      return
 
@@ -54,11 +59,24 @@ const NavBar = () => {
     // <div className="navindiv">
     <nav className="navbar">
       {/* <ul className="navbarUL"> */}
-      <div className="navbardiv">
+      {/* <div className="navbardiv">
           <NavLink to='/' exact={true} activeClassName='active' className='navlink'>
             Home/My Boards
           </NavLink>
-        </div>
+        </div> */}
+        {user === null && <div className="navbardiv">
+          {/* <NavLink to='/' exact={true} activeClassName='active' className='navlink'>
+            Home
+          </NavLink> */}
+          <button className = "navlink" onClick={myboard}>Home</button>
+        </div>}
+        {user !== null && <div className="navbardiv">
+          {/* <NavLink to='/' exact={true} activeClassName='active' className='navlink'>
+            My Boards
+          </NavLink> */}
+          <button className = "navlink" onClick={myboard}>My Boards</button>
+        </div>}
+
         {user !== null && <div className="navbardiv">
           <button className = "navlink" onClick={createBoard}>Create New Board</button>
         </div>}
@@ -77,13 +95,14 @@ const NavBar = () => {
             Users
           </NavLink>
         </div> */}
-        {user !== null && <div className="navbarUL" className='navbardiv dropdown'>
-          User Menu
-          <div
+        {user !== null && <div className='navbardiv'>
+        <button className = "navlink" onClick={dropdown}>User Menu</button>
+        {user !== null && showdropdown && <div
           className='dropdown-content'
-          ><LogoutButton /> </div>
-
+          ><LogoutButton /> </div>}
         </div>}
+
+
     </nav>
 
   );

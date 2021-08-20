@@ -19,7 +19,7 @@ const Footer = () => {
             <a
             className="footeratag"
             target="_blank"
-            href='https://github.com/justinycho-business/justintrelloclone'>About the developer: Justin Cho</a>
+            href='https://justinycho-business.github.io/'>About the Developer</a>
         </div>
     )
 
