@@ -20,10 +20,18 @@
     left: 0;
     /* background-color: rgb(38, 193, 231); */
     background-color: #90d4ed;
+    scroll-margin-top: 100px;
+scroll-margin-right: 20px;
+scroll-margin-bottom: 20px;
+scroll-margin-left: 20px;
 }
 
 ::-webkit-scrollbar {
     width: 10px;
+    scroll-margin-top: 100px;
+scroll-margin-right: 20px;
+scroll-margin-bottom: 20px;
+scroll-margin-left: 20px;
 }
 
 /* Track */
@@ -42,6 +50,8 @@
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+
 
 .boardname{
     color: white;
