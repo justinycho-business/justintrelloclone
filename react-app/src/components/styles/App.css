@@ -1,3 +1,12 @@
 .hi404{
     margin-top: 200px;
 }
+.navbar{
+    z-index: 2;
+}
+.board{
+    z-index: 0;
+}
+.footer{
+    z-index: 1;
+}

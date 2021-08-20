@@ -31,7 +31,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <NavBar />
+      <NavBar className="navbar" />
       <Switch>
         <Route path='/' exact={true}>
           <Home />
@@ -40,7 +40,7 @@ function App() {
           <LoginForm />
         </Route>
         <ProtectedRoute path='/board/:boardid' exact={true} >
-          <Board />
+          <Board className="board"/>
         </ProtectedRoute>
         <Route path='/sign-up' exact={true}>
           <SignUpForm />
@@ -58,7 +58,7 @@ function App() {
           <h1 className='hi404'>404 error. Try home!</h1>
         </Route>
       </Switch>
-    <Footer/>
+    <Footer className='footer'/>
     </BrowserRouter>
   );
 }

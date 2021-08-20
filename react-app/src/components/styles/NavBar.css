@@ -64,6 +64,7 @@ text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
   margin: 0;
   padding: 0 30px;
   list-style-type: none;
+  overflow: visible;
 
 }
 
@@ -89,10 +90,11 @@ text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
   background-color: rgb(38, 193, 231);
   border-radius: 20px;
   color: white;
+  overflow: visible;
 }
 
 .dropdown-content {
-  top: 80px;
+  top: 85px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -101,11 +103,8 @@ text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   padding: 12px 16px;
-  z-index: 1;
-  position: absolute;
+  overflow: visible;
+  position: fixed;
   border-radius: 15px;
-}
 
-.dropdown:hover .dropdown-content {
-  display: block;
 }
