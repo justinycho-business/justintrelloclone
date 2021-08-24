@@ -3,7 +3,8 @@
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: wheat;
+    /* background-color: wheat; */
+    background-image: linear-gradient( wheat, #d1c18e);
     color: white;
     text-align: center;
     padding: 10px;
@@ -29,4 +30,29 @@ text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
 border: 2px solid black;
 border-radius: 20px;
   color: white;
+}
+
+.cloud{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 30px;
+  background:#ECEFF1;
+  box-shadow: 10px 10px rgba(0,0,0,0.2);
+  border-radius:100px;
+  text-decoration: none;
+  color: black;
+  border: 2px solid black;
+  text-align: center;
+  padding: .5vw;
+  padding-left: 2vw;
+  padding-right: 2vw;
+}
+.cloud::after, .cloud::before{
+   content:"";
+   position:relative;
+   display:inline-block;
+   background:inherit;
+   border-radius:inherit;
+}
+.github{
+  padding: 1vw
 }

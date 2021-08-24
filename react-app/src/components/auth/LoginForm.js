@@ -56,7 +56,7 @@ const LoginForm = () => {
         ))}
       </div>
       <div className="formdiv">
-        <label htmlFor='email'>Email: </label>
+        <label className='label0' htmlFor='email'>Email: </label>
         <input
         className='forminput'
           name='email'
@@ -67,7 +67,7 @@ const LoginForm = () => {
         />
       </div>
       <div className="formdiv">
-        <label htmlFor='password'>Password: </label>
+        <label className='label0' htmlFor='password'>Password: </label>
         <input
         className='forminput'
           name='password'

@@ -58,7 +58,7 @@ scroll-margin-left: 20px;
     color: white;
     padding-bottom: 5px;
     font-size: 28px;
-    background-color: tomato;
+    background-color: rgb(241, 109, 86);
     padding: 10px;
     border-radius: 10px;
     margin-top: 150px;
@@ -67,7 +67,8 @@ scroll-margin-left: 20px;
 .border-1 {
     border: 2px solid blue;
     border-radius: 10px;
-    background-color: yellow;
+    /* background-color: rgb(214, 238, 106); */
+    background-image: linear-gradient( wheat, #d1c18e);
     padding: 20px;
     margin-top: 20px;
     margin-bottom: 50px;

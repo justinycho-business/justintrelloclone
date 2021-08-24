@@ -65,9 +65,10 @@ const SignUpForm = () => {
         ))}
       </div>
       <div className="formdiv">
-        <label>User Name: </label>
+        <label className='label0'>User Name: </label>
         <input
         className='forminput'
+        placeholder="Username"
           type='text'
           name='username'
           onChange={updateUsername}
@@ -75,9 +76,10 @@ const SignUpForm = () => {
         ></input>
       </div>
       <div className="formdiv">
-        <label>Email: </label>
+        <label className='label0'>Email: </label>
         <input
         className='forminput'
+        placeholder="email"
           type='text'
           name='email'
           onChange={updateEmail}
@@ -85,9 +87,10 @@ const SignUpForm = () => {
         ></input>
       </div>
       <div className="formdiv">
-        <label>Password: </label>
+        <label className='label0'>Password: </label>
         <input
         className='forminput'
+        placeholder="Password"
           type='password'
           name='password'
           onChange={updatePassword}
@@ -95,9 +98,10 @@ const SignUpForm = () => {
         ></input>
       </div>
       <div className="formdiv">
-        <label>Repeat Password: </label>
+        <label className='label0'>Repeat Password: </label>
         <input
         className='forminput'
+        placeholder="Repeat Password"
           type='password'
           name='repeat_password'
           onChange={updateRepeatPassword}

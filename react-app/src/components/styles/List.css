@@ -10,7 +10,7 @@
     font-size: 18px;
     font-family: Georgia, 'Times New Roman', Times, serif;
     color: white;
-    background-color: tomato;
+    background-color: rgb(241, 109, 86);
     border-radius: 10px;
 
 
@@ -37,7 +37,7 @@
 }
 
 .card-container {
-    background-color: rgb(83, 252, 83);
+    background-color: rgb(105, 235, 105);
     margin: 5px;
     padding: 20px;
     border-radius: 5px;

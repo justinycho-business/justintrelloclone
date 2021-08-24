@@ -32,7 +32,8 @@ html {
   border: 2px solid #EBECF1;
   /* border-radius: 30px; */
   /* padding: 20px; */
-  background-color: wheat;
+  /* background-color: wheat; */
+  background-image: linear-gradient(wheat, #eda6ac);
   height: 100px;
   /* animation: slide-in 1s ease-out; */
 }
@@ -50,12 +51,44 @@ html {
   font-size: 30px;
   text-decoration: none;
   padding: 10px;
-  background-color: #90d4ed;
+  /* background-color: #90d4ed; */
+  background-color: #2585c4;
 text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
   border-radius: 20px;
   color: white;
   border: 2px solid black;
 }
+
+.cloud{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 30px;
+  background:#ECEFF1;
+  box-shadow: 10px 10px rgba(0,0,0,0.2);
+  border-radius:100px;
+  text-decoration: none;
+  color: black;
+  border: 2px solid black;
+  text-align: center;
+  padding: .5vw;
+}
+.cloud::after, .cloud::before{
+   content:"";
+   position:relative;
+   display:inline-block;
+   background:inherit;
+   border-radius:inherit;
+}
+/* .cloud::after{
+   width:5vw;
+   height:2vh;
+   left:5vw;
+}
+.cloud::before{
+   width:2vw;
+   height:3vh;
+
+   left:-1vw;
+} */
 
 .navbardiv {
   justify-content: center;

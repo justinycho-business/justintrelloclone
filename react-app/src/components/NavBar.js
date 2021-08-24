@@ -68,25 +68,25 @@ const NavBar = () => {
           {/* <NavLink to='/' exact={true} activeClassName='active' className='navlink'>
             Home
           </NavLink> */}
-          <button className = "navlink" onClick={myboard}>Home</button>
+          <button className = "cloud" onClick={myboard}>Home</button>
         </div>}
         {user !== null && <div className="navbardiv">
           {/* <NavLink to='/' exact={true} activeClassName='active' className='navlink'>
             My Boards
           </NavLink> */}
-          <button className = "navlink" onClick={myboard}>My Boards</button>
+          <button className = "cloud" onClick={myboard}>My Boards</button>
         </div>}
 
         {user !== null && <div className="navbardiv">
-          <button className = "navlink" onClick={createBoard}>Create New Board</button>
+          <button className = "cloud" onClick={createBoard}>Create New Board</button>
         </div>}
         {user == null && <div className="navbardiv">
-          <NavLink to='/login' exact={true} activeClassName='active' className='navlink'>
+          <NavLink to='/login' exact={true} activeClassName='active' className='cloud'>
             Login
           </NavLink>
         </div>}
         {user == null && <div className="navbardiv">
-          <NavLink to='/sign-up' exact={true} activeClassName='active' className='navlink'>
+          <NavLink to='/sign-up' exact={true} activeClassName='active' className='cloud'>
             Sign Up
           </NavLink>
         </div>}
@@ -96,7 +96,7 @@ const NavBar = () => {
           </NavLink>
         </div> */}
         {user !== null && <div className='navbardiv'>
-        <button className = "navlink" onClick={dropdown}>User Menu</button>
+        <button className = "cloud" onClick={dropdown}>User Menu</button>
         {user !== null && showdropdown && <div
           className='dropdown-content'
           ><LogoutButton /> </div>}

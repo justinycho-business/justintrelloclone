@@ -12,12 +12,13 @@ const Footer = () => {
     return (
         <div className="Footerdiv">
             <a
+                className="github"
              target="_blank"
              href='https://github.com/justinycho-business/justintrelloclone'>
                 <img alt="github-logo-link-to-Justin-Cho" src="https://i.ibb.co/2cP4DT6/Git-Hub-Mark-64px.png"></img>
             </a>
             <a
-            className="footeratag"
+            className="cloud"
             target="_blank"
             href='https://justinycho-business.github.io/'>About the Developer</a>
         </div>

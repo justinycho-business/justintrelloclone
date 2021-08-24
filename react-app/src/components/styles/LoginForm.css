@@ -12,8 +12,11 @@
 }
 
 .LoginFormTitle{
-    margin-top: 10vw;
-    padding: 1px
+    color: wheat;
+    text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+    font-size: 6em;
+    padding: 2vh;
+    text-decoration: underline;
 }
 
 .logindiv{
@@ -21,7 +24,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 2px solid black
+    border: 2px solid black;
+    height: 97vh;
+    background-image: linear-gradient( #2585c4, #56dbc9 , wheat);
 }
 
 .formdiv {
@@ -37,11 +42,20 @@
 .forminput{
     border: 2px solid green;
     border-radius: 4px;
+    height: 2vh;
+    width: 20vw;
 }
-
+.label0{
+    font-size: 2vh;
+    color: wheat;
+    text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+}
 .formbutton {
     padding: 15px;
+    margin-top: 2vh;
     background-color: pink;
+    width: 20vw;
+    border-radius: 6px;
 }
 
 .buttondiv {
